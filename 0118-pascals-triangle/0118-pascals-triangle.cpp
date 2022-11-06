@@ -1,39 +1,33 @@
 class Solution {
 public:
     vector<vector<int>> generate(int numRows) {
-        vector<vector<int>> v;
-        vector<int> temp;
-        temp.push_back(1);
-        v.push_back(temp);
-        if(numRows == 1){
-            return v;
-        }
-        temp.clear();
-        temp.push_back(1);
-        temp.push_back(1);
-        v.push_back(temp);
-        temp.clear();
-        if(numRows == 2){
-            return v;
-        }
-        for(int i=2;i<numRows;i++){
-            temp.clear();
-            for(int j=0;j<v[i-1].size();j++){
-                // cout<<v[i-1].size()<<endl;
-                if(j==0){
-                    temp.push_back(1);
-                }
-                else if(j == v[i-1].size()-1){
-                    temp.push_back(v[i-1][j-1]+1);
-                    temp.push_back(1);
-                }else{
-                    // cout<<"hello";
-                    temp.push_back(v[i-1][j] + v[i-1][j-1]);
-                    // cout<<"hello";
-                }
+        vector<vector<int>> ans;
+        vector<int> prev;
+        prev.push_back(1);
+        ans.push_back(prev);
+        numRows--;
+        int i=0;
+        // cout<<numRows<<endl;x
+        while(numRows>=1){
+            vector<int> temp;
+            if(i==0){
+                temp.push_back(1);
+                temp.push_back(1);
+                ans.push_back(temp);
+                i++;
+                numRows--;
+                continue;
             }
-            v.push_back(temp);
+            temp.push_back(1);
+            for(int j=0;j<ans[i].size()-1;j++){
+                // cout<<ans[i][j]<<"ans"<<endl;
+                temp.push_back(ans[i][j]+ans[i][j+1]);
+            }
+            temp.push_back(1);
+            ans.push_back(temp);
+            i++;
+            numRows--;
         }
-        return v;
+        return ans;
     }
 };
