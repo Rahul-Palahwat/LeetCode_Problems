@@ -30,19 +30,15 @@ class Solution{
         }
         vis[i][j]=1;
         s+='D';
-        // if((i+1 < n) && m[i+1][j] != 0)
         solve(m,n,i+1,j,ans,s);
         s.pop_back();
         s+='R';
-        // if((j+1 < n) && m[i][j+1] != 0)
         solve(m,n,i,j+1,ans,s);
         s.pop_back();
         s+='U';
-        // if((i-1 >= 0) && m[i-1][j] != 0)
         solve(m,n,i-1,j,ans,s);
         s.pop_back();
         s+='L';
-        // if((j-1 >= 0) && m[i][j-1] != 0)
         solve(m,n,i,j-1,ans,s);
         s.pop_back();
         vis[i][j] = -1;
@@ -53,7 +49,7 @@ class Solution{
         memset(vis,-1,sizeof(vis));
         vector<string> ans;
         solve(m,n,0,0,ans,"");
-        sort(ans.begin(),ans.end());
+        // sort(ans.begin(),ans.end());
         return ans;
     }
 };
