@@ -7,87 +7,47 @@ using namespace std;
 // } Driver Code Ends
 // User function Template for C++
 class Solution {
-
   public:
-
-    void solve(unordered_map<int ,list<pair<int,int>>>adj, int n , int k ,vector<int>&dis){
-
-        
-
-        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;
-
-        
-
-        pq.push({k,0});
-
-        dis[k]=0;
-
-        while(!pq.empty()){
-
-            
-
-            int x=pq.top().first;
-
-            int y=pq.top().second;
-
-            pq.pop();
-
-            
-
-            for(auto i:adj[x]){
-
-                if(dis[i.first]>y+i.second){
-
-                    dis[i.first]=y+i.second;
-
-                    pq.push({i.first,y+i.second});
-
+    void solve(vector<pair<int,int>> g[],vector<bool> &vis , vector<int> &dis, int source){
+        set<pair<int,int>> st;
+        st.insert({0,source});
+        dis[source] = 0;
+        while(st.size() > 0){
+            auto t = *st.begin();
+            st.erase(st.begin());
+            if(vis[t.second]){
+                continue;
+            }
+            vis[t.second] = 1;
+            for(auto child: g[t.second]){
+                int child_v = child.first;
+                int w_v = child.second;
+                if(dis[t.second]+w_v < dis[child_v]){
+                    dis[child_v] = dis[t.second]+w_v;
+                    st.insert({dis[child_v], child_v});
                 }
-
             }
-
         }
-
     }
-
     int minimumCost(vector<vector<int>>& flights, int n, int k) {
-
-        unordered_map<int ,list<pair<int,int>>>adj;
-
-        for(int i=0;i<flights.size();i++){
-
-            adj[flights[i][0]].push_back({flights[i][1],flights[i][2]});
-
+        // code here
+        vector<int> dis(n+1,INT_MAX);
+        vector<bool> vis(n+1,0);
+        vector<pair<int,int>> g[n+1];
+        for(auto it: flights){
+            g[it[0]].push_back({it[1],it[2]});
         }
-
-        
-
-        vector<int>dis(n+1,INT_MAX);
-
-        solve(adj,n,k,dis);
-
-        int maxi=INT_MIN;
-
+        solve(g,vis,dis,k);
+        int ans = INT_MIN;
         for(int i=1;i<=n;i++){
-
-            if(dis[i]==INT_MAX){
-
+            if(dis[i] == INT_MAX){
                 return -1;
-
             }
-
-            if(dis[i]>maxi){
-
-                maxi=dis[i];
-
-            }
-
+            ans = max(ans,dis[i]);
         }
-
-        return maxi;
-
+        return ans;
+        
     }
-
 };
 
 
