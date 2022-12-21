@@ -1,103 +1,45 @@
-#define WHITE 0
-#define RED 1
-#define BLUE 2
 class Solution {
 public:
-//     bool possibleBipartition(int n, vector<vector<int>>& dislikes) {
-//         unordered_map<int,int> mpf,mps;
-//         for(auto it: dislikes){
-//             if(mpf.find(it[0]) != mpf.end()){
-                
-//             }
-//         }
-//     }
-    bool possibleBipartition(int N, vector<vector<int>> &edges) 
-    {
-        vector<vector<int>> adj(N + 1); // adjacency list for undirected graph
-        vector<int> color(N + 1, WHITE); // color of each vertex in graph, initially WHITE
-        vector<bool> explored(N + 1, false); // to check if each vertex has been explored exactly once
-        
-        // create adjacency list from given edges
-        for (auto &edge: edges)
-        {
-            int u = edge[0];
-            int v = edge[1];
-            adj[u].push_back(v);
-            adj[v].push_back(u);
-        }
-        
-        // print adjacency list (comment out before submitting)
-        for (int i = 0; i <= N; ++i)
-        {
-            cout << "adj[" << i << "]: ";
-            for (int j = 0; j < adj[i].size(); ++j)
-            {
-                cout << adj[i][j] << " ";
-            }
-            cout << "\n";
-        }
-        
-        // queue to perform BFS over each connected component in the graph
-        // while performing BFS, we check if we encounter any conflicts while
-        // coloring the vertices of the graph
-        // conflicts indicate that bi-partition is not possible
+    bool solve(vector<int> g[],int node,vector<bool> &vis , vector<int> &col){
         queue<int> q;
-        
-        for (int i = 1; i <= N; ++i)
-        {
-            if (!explored[i])
-            {
-                // this component has not been colored yet
-				// we color the first vertex RED and push it into the queue
-                color[i] = RED;
-                q.push(i);
-                
-                // perform BFS from vertex i
-                while (!q.empty())
-                {
-                    int u = q.front();
-                    q.pop();
-                    
-                    // check if u is already explored 
-                    if (explored[u])
-                    {
-                        continue;
+        q.push(node);
+        col[node] = 1;
+        while(!q.empty()){
+            int t = q.front();
+            q.pop();
+            vis[t] = true;
+            for(auto it: g[t]){
+                if(vis[it] == true){
+                    if(col[it] == col[t]){
+                        return false;
                     }
-                    
-                    explored[u] = true;
-                    
-                    // for each neighbor of u, execute this loop
-                    for (auto v: adj[u])
-                    {
-                        // v is u's neighboring vertex
-                        
-                        // checking if there's any conflict in coloring
-                        if (color[v] == color[u])
-                        {
-							// conflict edge found, so we return false 
-							// as bi-partition will not be possible
-                            return false;
-                        }
-                        
-                        // we color v with the opposite color of u
-                        if (color[u] == RED)
-                        {
-                            color[v] = BLUE;
-                        }
-                        else 
-                        {
-                            color[v] = RED;
-                        }
-                        
-                        q.push(v);
-                    }
+                    continue;
+                }
+                q.push(it);
+                if(col[t] == 1){
+                    col[it] = 2;
+                }else{
+                    col[it] = 1;
                 }
             }
         }
-        
-        // if no conflicts encountered then graph must be bipartite
-        // so we return true
-        
         return true;
     }
+    bool possibleBipartition(int n, vector<vector<int>>& dislikes) {
+        vector<int> g[n+1];
+        for(auto it: dislikes){
+            g[it[0]].push_back(it[1]);
+            g[it[1]].push_back(it[0]);
+        }
+        vector<bool> vis(n+1,0);
+        vector<int> col(n+1,0);
+        bool ans = true;
+        for(int i=1;i<=n;i++){
+            if(vis[i] == false){
+                ans = ans && solve(g,i,vis,col);
+            }
+        }
+        return ans;
+    }
+    
 };
