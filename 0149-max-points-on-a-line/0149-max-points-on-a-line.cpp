@@ -1,39 +1,5 @@
 class Solution {
 public:
-    // int maxPoints(vector<vector<int>>& points) {
-    //     int ans =1;
-    //     for(int i=0;i<points.size();i++){
-    //         for(int j=0;j<points.size();j++){
-    //             if(i==j){
-    //                 continue;
-    //             }
-    //             long long m = 1LL;
-    //             int den = (points[j][0] - points[i][0]);
-    //             int flag=0;
-    //             if(den == 0){
-    //                 m=0;
-    //                 // cout<<m<<endl;
-    //                 flag=1;
-    //             }else{
-    //                 m = (points[j][1] - points[i][1])/den;
-    //             }
-    //             int c = points[j][1] - m*(points[j][0]);
-    //             int temp=0;
-    //             for(int k=0;k<points.size();k++){
-    //                 if(flag==1){
-    //                     if(points[k][0] == m){
-    //                         temp++;
-    //                     }
-    //                 }
-    //                 else if((points[k][1] - c) == (m*points[k][0])){
-    //                     temp++;
-    //                 }
-    //             }
-    //             ans = max(ans,temp);
-    //         }
-    //     }
-    //     return ans;
-    // }
     int maxPoints(vector<vector<int>>& pt) {
         int ans=1; 
         int n=pt.size();
@@ -57,4 +23,40 @@ public:
         }
         return ans;
     }
+//     int maxPoints(vector<vector<int>>& pt) {
+//         int n = pt.size();
+//         int ans = 1;
+//         for(int i=0;i<n;i++){
+//             for(int j=0;j<n;j++){
+//                 if(i==j){
+//                     continue;
+//                 }
+//                 int count=0;
+//                 int num = pt[j][1]-pt[i][1];
+//                 int den = pt[j][0]-pt[i][0];
+//                 if(den == 0){
+//                     int c = -1*num*pt[j][0];
+//                     for(auto it: pt){
+//                         if(it[0] == (-1*c)/num){
+//                             count++;
+//                             ans = max(ans,count);
+//                         }
+                        
+//                     }
+//                 }else{
+//                     int c = pt[j][1]*den - num*pt[j][0];
+//                     for(auto it: pt){
+//                         int left = it[1]*den;
+//                         int right = it[0]*num + c;
+//                         if(left == right){
+//                             count++;
+//                             // cout<<count<<"count"<<endl;
+//                             ans = max(ans,count);
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//         return ans;
+//     }
 };
