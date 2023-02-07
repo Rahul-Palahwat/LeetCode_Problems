@@ -6,7 +6,8 @@ public:
         int j=0;
         for(int i=0;i<fruits.size();i++){
             mp[fruits[i]]++;
-            while(mp.size() >=3){
+            while(mp.size() > 2){
+                // cout<<i<<"i"<<j<<endl;
                 if(mp[fruits[j]] == 1){
                     mp.erase(fruits[j]);
                 }else{
