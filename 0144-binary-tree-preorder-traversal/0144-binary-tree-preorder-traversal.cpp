@@ -11,29 +11,20 @@
  */
 class Solution {
 public:
-    void solve(TreeNode* root,vector<int>& v){
-        stack<TreeNode*> q;
-        if(root == NULL){
-            return;
-        }
-        q.push(root);
-        while(q.size() > 0){
-            auto t = q.top();
-            cout<<t->val<<" ";
-            q.pop();
-            v.push_back(t->val);
-            if(t->right != NULL){
-                q.push(t->right);
-            }
-            if(t->left != NULL){
-                q.push(t->left);
-            }
-        }
-        return;
-    }
     vector<int> preorderTraversal(TreeNode* root) {
-        vector<int> v;
-        solve(root,v);
-        return v;
+        vector<int> ans;
+        stack<TreeNode*> st;
+        st.push(root);
+        while(!st.empty()){
+            auto t = st.top();
+            st.pop();
+            if(t == NULL){
+                continue;
+            }
+            ans.push_back(t->val);
+            st.push(t->right);
+            st.push(t->left);
+        }
+        return ans;
     }
 };
