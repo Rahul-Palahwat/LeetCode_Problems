@@ -40,11 +40,13 @@ public:
                 while(prev->right && prev->right != cur){
                     prev = prev->right;
                 }
+                // if no thread is present then we will add thread
                 if(prev->right == NULL){
                     prev->right = cur;
                     cur = cur->left;
-                }else{
-                    cur = prev->right;
+                }
+                // thread already present so we have to break that thread 
+                else{
                     inorder.push_back(cur->val);
                     prev->right = NULL;
                     cur = cur->right;
