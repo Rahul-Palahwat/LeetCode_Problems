@@ -11,18 +11,24 @@
  */
 class Solution {
 public:
-    void solve(TreeNode* root , vector<int>& ans){
-        if(root == NULL){
-            return;
-        }
-        solve(root->left,ans);
-        ans.push_back(root->val);
-        solve(root->right,ans);
-        return;
-    }
     int kthSmallest(TreeNode* root, int k) {
-        vector<int> ans;
-        solve(root , ans);
-        return ans[k-1];
+        priority_queue<int> maxh;
+        queue<TreeNode*> q;
+        q.push(root);
+        while(!q.empty()){
+            auto top = q.front();
+            q.pop();
+            maxh.push(top->val);
+            if(maxh.size() > k){
+                maxh.pop();
+            }
+            if(top->left){
+                q.push(top->left);
+            }
+            if(top->right){
+                q.push(top->right);
+            }
+        }
+        return maxh.top();
     }
 };
