@@ -25,6 +25,7 @@ public:
                 if (nr < 0 || nr >= m || nc < 0 || nc >= n || visited[nr][nc]) {
                     continue;
                 }
+                // If time for a neighbor (target) cell is > 1 + time for current cell. We can not directly move to target cell. We will have to "ping pong" between previous cell and current cell.
                 bool wait = (grid[nr][nc] - t) % 2 == 0;
                 int nt = max(grid[nr][nc] + wait, t + 1);
                 pq.push({nt, nr, nc});
