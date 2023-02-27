@@ -11,32 +11,62 @@
  */
 class BSTIterator {
 public:
-    vector<int> ans;
-    void solve(TreeNode* root){
-        if(!root){
-            return;
-        }
-        solve(root->left);
-        ans.push_back(root->val);
-        solve(root->right);
-        return;
-    }
-    int n;
+    
+    // Brute force approach time O(n) & O(1) , Space O(N) but we need to solve this in O(H)
+//     vector<int> ans;
+//     void solve(TreeNode* root){
+//         if(!root){
+//             return;
+//         }
+//         solve(root->left);
+//         ans.push_back(root->val);
+//         solve(root->right);
+//         return;
+//     }
+//     int n;
+//     BSTIterator(TreeNode* root) {
+//         solve(root);
+//         reverse(ans.begin() , ans.end());
+//         n = ans.size();
+//     }
+//     int next() {
+//         n--;
+//         return ans[n];
+//     }
+    
+//     bool hasNext() {
+//         if(n<=0){
+//             return false;
+//         }
+//         return true;
+//     }
+    
+    
+    
+    
+    // Now here comes the space complexity where we solve it in O(H)
+    stack<TreeNode*> st;
     BSTIterator(TreeNode* root) {
-        solve(root);
-        reverse(ans.begin() , ans.end());
-        n = ans.size();
+        while(root){
+            st.push(root);
+            root = root->left;
+        }
     }
     int next() {
-        n--;
-        return ans[n];
+        auto top = st.top();
+        st.pop();
+        if(top->right){
+            TreeNode* right = top->right;
+            while(right){
+                st.push(right);
+                right = right->left;
+            }
+        }
+        return top->val;
     }
     
     bool hasNext() {
-        if(n<=0){
-            return false;
-        }
-        return true;
+        return st.size();
     }
 };
 
