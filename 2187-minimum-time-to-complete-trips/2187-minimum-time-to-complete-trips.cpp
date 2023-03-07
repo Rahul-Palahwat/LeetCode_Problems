@@ -1,6 +1,6 @@
 class Solution {
 public:
-    bool check(vector<int> time , int total , long long total_time){
+    bool check(vector<int>& time , int total , long long total_time){
         long long ans = 0;
         for(auto it: time){
             ans+=(total_time / it);
