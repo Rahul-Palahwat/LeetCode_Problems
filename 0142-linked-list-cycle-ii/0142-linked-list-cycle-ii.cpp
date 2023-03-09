@@ -8,39 +8,19 @@
  */
 class Solution {
 public:
-    // Brute force approach 
-    // ListNode *detectCycle(ListNode *head) {
-    //     ListNode* temp = head;
-    //     unordered_map<ListNode* , int> mp;
-    //     while(temp){
-    //         if(mp.find(temp) != mp.end()){
-    //             return temp;
-    //         }
-    //         mp[temp]=1;
-    //         temp=temp->next;
-    //     }
-    //     return NULL;
-    // }
-    
-    // optimized using fast and slow pointer 
-     ListNode *detectCycle(ListNode *head) {
-        ListNode *slow = head , *fast=head;
-         int flag=0;
-        while(fast && fast->next){
-            if(flag==1 && slow == fast){
-                // cout<<slow->val<<"slow"<<endl;
-                ListNode* entry=head;
-                while(entry != slow){
-                    entry=entry->next;
-                    slow=slow->next;
-                }
-                return entry;
+    ListNode *detectCycle(ListNode *head) {
+        if(!head){
+            return NULL;
+        }
+        unordered_map<ListNode*,int> mp;
+        while(head){
+            if(mp.find(head) == mp.end()){
+                mp[head]=1;
+            }else{
+                return head;
             }
-            flag=1;
-            slow=slow->next;
-            fast = fast->next->next;
+            head = head->next;
         }
         return NULL;
     }
-    
 };
