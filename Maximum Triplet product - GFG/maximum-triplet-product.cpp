@@ -15,7 +15,7 @@ class Solution {
     	// Complete the function
     	sort(arr , arr+n);
     	long long ans = (arr[n-1]*arr[n-2]*arr[n-3]);
-    	ans = max(ans , arr[0]*arr[1]*arr[2]);
+    // 	ans = max(ans , arr[0]*arr[1]*arr[2]);
     	ans = max(ans  , arr[0]*arr[1]*arr[n-1]);
     	return ans;
     }
