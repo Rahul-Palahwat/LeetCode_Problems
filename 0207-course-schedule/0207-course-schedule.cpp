@@ -1,28 +1,44 @@
 class Solution {
 public:
-    bool iscycle(vector<int> adj[],vector<int> &vis,int id){
-        if(vis[id]==1)
-            return true;
-        if(vis[id]==0){
-            vis[id]=1;
-            for(auto edge : adj[id]){
-                if(iscycle(adj,vis,edge))
-                    return true;
+    
+    // solve by topological sort using DAG(Directed Acyclic Graph)
+    
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<int> g[numCourses];
+        for(auto it: prerequisites){
+            g[it[1]].push_back(it[0]);
+        }
+        vector<int> indegree(numCourses , 0);
+        for(int i=0;i<numCourses;i++){
+            for(auto it: g[i]){
+                indegree[it]++;
             }
         }
-        vis[id] = 2;
-        return false;
-    }
-    bool canFinish(int n, vector<vector<int>>& pre) {
-        vector<int> adj[n];
-        for(auto edge : pre)
-            adj[edge[1]].push_back(edge[0]);
-        vector<int> vis(n,0);
-        
-        for(int i=0;i<n;i++){
-            if(iscycle(adj,vis,i))
-                return false;
+        queue<int> q;
+        vector<int> ans;
+        for(int i=0;i<numCourses;i++){
+            if(indegree[i] == 0){
+                q.push(i);
+            }
         }
-        return true;
+        while(!q.empty()){
+            auto top = q.front();
+            q.pop();
+            ans.push_back(top);
+            for(auto it: g[top]){
+                indegree[it]--;
+                if(indegree[it] == 0){
+                    q.push(it);
+                }
+            }
+        }
+        // for(auto it: ans){
+        //     cout<<it<<" ";
+        // }
+        // cout<<endl;
+        if(ans.size() == numCourses){
+            return true;
+        }
+        return false;
     }
 };
