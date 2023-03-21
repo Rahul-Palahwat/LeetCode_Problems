@@ -1,48 +1,53 @@
 class Solution {
 public:
-    bool solve(int index ,vector<bool>& vis ,  vector<int> g[], vector<int>& col){
-        queue<int> q;
-        q.push(index);
-        col[index] = 0;
+    bool solve(int node, vector<bool>& vis , vector<int>& col,vector<vector<int>>& graph){
+        queue<pair<int,int>> q;
+        q.push({node , -1});
         while(!q.empty()){
-            int t = q.front();
+            int n = q.front().first;
+            int c = q.front().second;
             q.pop();
-            vis[t] = true;
-            for(auto it: g[t]){
-                if(col[it] == col[t]){
-                    return false;
-                }else{
-                    if(vis[it] == true){
-                        continue;
-                    }
-                    q.push(it);
-                    if(col[t] == 1){
-                        col[it] =0;
-                    }else{
-                        col[it]=1;
-                    }
-                }
+            vis[n] = true;
+            if(c == -1){
+                col[n] = 0;
+            }else if(c == 0){
+                col[n] = 1;
+            }else{
+                col[n] = 0;
             }
+            for(auto it: graph[n]){
+                if(vis[it]){
+                    if(col[it] == col[n]){
+                        cout<<col[it]<<"Hello"<<col[n]<<" "<<it<<" "<<n<<endl;
+                        return true;
+                    }
+                    continue;
+                }
+                q.push({it , col[n]});
+            }
+            
         }
-        return true;
+        return false;
     }
     bool isBipartite(vector<vector<int>>& graph) {
         int n = graph.size();
         vector<bool> vis(n,false);
         vector<int> col(n,-1);
-        vector<int> g[n];
+        queue<int> q;
         for(int i=0;i<n;i++){
-            for(auto it: graph[i]){
-                g[i].push_back(it);
+            if(!vis[i]){
+                cout<<"first"<<endl;
+                if(solve(i , vis , col , graph)){
+                    return false;
+                }
             }
         }
-        bool ans = true;
-        for(int i=0;i<n;i++){
-            if(vis[i] == false){
-                ans = ans && solve(i,vis,g,col);
-            }
+        for(auto it: col){
+            cout<<it<<" ";
         }
-        return ans;
-        
+        for(auto it: vis){
+            cout<<it<<" ";
+        }
+        return true;
     }
 };
