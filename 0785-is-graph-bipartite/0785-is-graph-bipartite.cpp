@@ -1,11 +1,11 @@
 class Solution {
 public:
     bool solve(int node, vector<bool>& vis , vector<int>& col,vector<vector<int>>& graph){
-        queue<pair<int,int>> q;
+        stack<pair<int,int>> q;
         q.push({node , -1});
         while(!q.empty()){
-            int n = q.front().first;
-            int c = q.front().second;
+            int n = q.top().first;
+            int c = q.top().second;
             q.pop();
             vis[n] = true;
             if(c == -1){
@@ -18,7 +18,7 @@ public:
             for(auto it: graph[n]){
                 if(vis[it]){
                     if(col[it] == col[n]){
-                        cout<<col[it]<<"Hello"<<col[n]<<" "<<it<<" "<<n<<endl;
+                        // cout<<col[it]<<"Hello"<<col[n]<<" "<<it<<" "<<n<<endl;
                         return true;
                     }
                     continue;
@@ -36,17 +36,10 @@ public:
         queue<int> q;
         for(int i=0;i<n;i++){
             if(!vis[i]){
-                cout<<"first"<<endl;
                 if(solve(i , vis , col , graph)){
                     return false;
                 }
             }
-        }
-        for(auto it: col){
-            cout<<it<<" ";
-        }
-        for(auto it: vis){
-            cout<<it<<" ";
         }
         return true;
     }
