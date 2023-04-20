@@ -11,6 +11,8 @@
  */
 class Solution {
 public:
+    
+    // my previous solution 
     int widthOfBinaryTree(TreeNode* root) {
         if(!root){
             return 0;
@@ -46,4 +48,30 @@ public:
         }
         return ans;
     }
+    
+    
+    
+    // Now my new solution 
+    // int widthOfBinaryTree(TreeNode* root) {
+    //     if(!root){
+    //         return 0;
+    //     }
+    //     int ans = 0;
+    //     queue<pair<TreeNode* , int>> q;
+    //     q.push({root , 0});
+    //     while(!q.empty()){
+    //         int start , end;
+    //         int sz = q.size();
+    //         while(sz--){
+    //             auto top = q.front();
+    //             q.pop();
+    //             if(top.first->left){
+    //                 q.push({top.first->left , top.second-1});
+    //             }
+    //             if(top.first->right){
+    //                 q.push({top.first->right , top.second+1});
+    //             }
+    //         }
+    //     }
+    // }
 };
