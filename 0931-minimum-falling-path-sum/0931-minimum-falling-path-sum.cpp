@@ -64,26 +64,52 @@ public:
     
     
     // Tabluation DP , bottom up
+    // int minFallingPathSum(vector<vector<int>>& matrix) {
+    //     int n = matrix.size();
+    //     vector<vector<int>> dp(n , vector<int>(n,0));
+    //     for(int i=0;i<n;i++){
+    //         for(int j=0;j<n;j++){
+    //             if(i==0){
+    //                 dp[i][j] = matrix[i][j];
+    //             }else{
+    //                 if(j == 0){
+    //                     dp[i][j] = matrix[i][j]+min(dp[i-1][j] , dp[i-1][j+1]);
+    //                 }else if(j == n-1){
+    //                     dp[i][j] = matrix[i][j]+min(dp[i-1][j] , dp[i-1][j-1]);
+    //                 }else{
+    //                     dp[i][j] = matrix[i][j]+min(dp[i-1][j] , min(dp[i-1][j-1] , dp[i-1][j+1]));
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     int ans = INT_MAX;
+    //     for(auto it: dp[n-1]){
+    //         ans = min(ans , it);
+    //     }
+    //     return ans;
+    // }
+    
+    
+    
+     // Tabluation DP  , space optimization
     int minFallingPathSum(vector<vector<int>>& matrix) {
         int n = matrix.size();
-        vector<vector<int>> dp(n , vector<int>(n,0));
-        for(int i=0;i<n;i++){
+        vector<int> dp = matrix[0];
+        for(int i=1;i<n;i++){
+            vector<int> temp = matrix[i];
             for(int j=0;j<n;j++){
-                if(i==0){
-                    dp[i][j] = matrix[i][j];
+                if(j == 0){
+                    temp[j] += min(dp[j] , dp[j+1]);
+                }else if(j == n-1){
+                    temp[j] += min(dp[j] , dp[j-1]);
                 }else{
-                    if(j == 0){
-                        dp[i][j] = matrix[i][j]+min(dp[i-1][j] , dp[i-1][j+1]);
-                    }else if(j == n-1){
-                        dp[i][j] = matrix[i][j]+min(dp[i-1][j] , dp[i-1][j-1]);
-                    }else{
-                        dp[i][j] = matrix[i][j]+min(dp[i-1][j] , min(dp[i-1][j-1] , dp[i-1][j+1]));
-                    }
-                }
+                    temp[j] += min(dp[j] , min(dp[j-1] , dp[j+1]));
+                } 
             }
+            dp = temp;
         }
         int ans = INT_MAX;
-        for(auto it: dp[n-1]){
+        for(auto it: dp){
             ans = min(ans , it);
         }
         return ans;
