@@ -51,7 +51,42 @@ public:
     
     
     
-    // Now my new solution 
+    // Now my new solution , this will work but it will give error in case of skew tree as we are doing 2^1e5 , overflow will happen
+    // int widthOfBinaryTree(TreeNode* root) {
+    //     if(!root){
+    //         return 0;
+    //     }
+    //     long long ans = 0;
+    //     queue<pair<TreeNode* , long long>> q;
+    //     q.push({root , 1});
+    //     while(!q.empty()){
+    //         long long start , end , flag=0;
+    //         long long sz = q.size();
+    //         while(sz--){
+    //             auto top = q.front();
+    //             q.pop();
+    //             if(flag==0){
+    //                 start = top.second;
+    //                 flag=1;
+    //             }
+    //             if(sz == 0){
+    //                 end = top.second;
+    //             }
+    //             if(top.first->left){
+    //                 q.push({top.first->left , 2*1LL*top.second});
+    //             }
+    //             if(top.first->right){
+    //                 q.push({top.first->right , 2*1LL*top.second+1});
+    //             }
+    //         }
+    //         ans = max(ans , (end-start+1));
+    //     }
+    //     return ans;
+    // }
+    
+    
+    
+    // Now optimization to prevent overflow
     int widthOfBinaryTree(TreeNode* root) {
         if(!root){
             return 0;
@@ -73,10 +108,10 @@ public:
                     end = top.second;
                 }
                 if(top.first->left){
-                    q.push({top.first->left , 2*(top.second-start)});
+                    q.push({top.first->left , 2*(top.second-start)+1});
                 }
                 if(top.first->right){
-                    q.push({top.first->right , 2*(top.second-start)+1});
+                    q.push({top.first->right , 2*(top.second-start)+2});
                 }
             }
             ans = max(ans , (end-start+1));
