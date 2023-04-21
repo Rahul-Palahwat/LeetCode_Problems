@@ -44,16 +44,37 @@ public:
     
     
     // Another approach 
+    
+    // 1.Recursion with memiozation
+    int solve(int i , int j , vector<vector<int>>& triangle,vector<vector<int>>& dp){
+        if(i == triangle.size()-1){
+            return triangle[i][j];
+        }
+        if(dp[i][j] != -1){
+            return dp[i][j];
+        }
+        int one = triangle[i][j]+solve(i+1 , j , triangle,dp);
+        int two = triangle[i][j]+solve(i+1 , j+1 , triangle,dp);
+        return dp[i][j] = min(one,two);
+    }
     int minimumTotal(vector<vector<int>>& triangle) {
         int n = triangle.size();
-        vector<int> prev = triangle[n-1];
-        for(int i=n-2;i>=0;i--){
-            vector<int> curr=triangle[i];
-            for(int j=0;j<curr.size();j++){
-                curr[j]+=min(prev[j] , prev[j+1]);
-            }
-            prev = curr;
-        }
-        return prev[0];
+        vector<vector<int>> dp(n , vector<int>(n , -1));
+        return solve(0 , 0 , triangle,dp);
     }
+    
+    
+    // Space optimized
+    // int minimumTotal(vector<vector<int>>& triangle) {
+    //     int n = triangle.size();
+    //     vector<int> prev = triangle[n-1];
+    //     for(int i=n-2;i>=0;i--){
+    //         vector<int> curr=triangle[i];
+    //         for(int j=0;j<curr.size();j++){
+    //             curr[j]+=min(prev[j] , prev[j+1]);
+    //         }
+    //         prev = curr;
+    //     }
+    //     return prev[0];
+    // }
 };
