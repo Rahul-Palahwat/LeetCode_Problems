@@ -25,29 +25,5 @@ public:
             return "Radiant";
         }
         return "Dire";
-        // queue<char> q;
-        // for(auto it: senate){
-        //     q.push(it);
-        // }
-        // int count  = 0;
-        // int n = senate.size();
-        // while(n>count && q.size() > 0){
-        //     count++;
-        //     if(q.front() == 'D'){
-        //         while(q.front() != 'R'){
-        //             q.pop();
-        //             q.push('D');
-        //         }
-        //         q.pop();
-        //     }
-        //     if(q.front() == 'R'){
-        //         while(q.front() != 'D'){
-        //             q.pop();
-        //             q.push('R');
-        //         }
-        //         q.pop();
-        //     }
-        // }
-        // return q.front() == 'D' ? "Dire" : "Radiant";
     }
 };
