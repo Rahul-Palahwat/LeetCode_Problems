@@ -65,6 +65,41 @@ public:
     
     
     // Tabulation 
+    // bool canPartition(vector<int>& nums) {
+    //     int sum = 0 , n = nums.size();
+    //     for(auto it: nums){
+    //         sum+=it;
+    //     }
+    //     if(sum%2 != 0){
+    //         return false;
+    //     }
+    //     sum/=2;
+    //     vector<vector<int>> dp(n+1 , vector<int>(sum+1 , -1));
+    //     for(int i=0;i<n+1;i++){
+    //         for(int j=0;j<sum+1;j++){
+    //             if(i == 0 && j==0){
+    //                 dp[i][j] = true;
+    //             }else if(i == 0){
+    //                 dp[i][j] = false;
+    //             }else if(i == 0){
+    //                 dp[i][j] = true;
+    //             }
+    //         }
+    //     }
+    //     for(int i=1;i<n+1;i++){
+    //         for(int j=1;j<sum+1;j++){
+    //             if(nums[i-1] <= j){
+    //                 dp[i][j] = dp[i-1][j] || dp[i-1][j-nums[i-1]];
+    //             }else{
+    //                 dp[i][j] = dp[i-1][j];
+    //             }
+    //         }
+    //     }
+    //     return dp[n][sum];
+    // }
+    
+    
+    // Tabulation + Optimization
     bool canPartition(vector<int>& nums) {
         int sum = 0 , n = nums.size();
         for(auto it: nums){
@@ -74,27 +109,20 @@ public:
             return false;
         }
         sum/=2;
-        vector<vector<int>> dp(n+1 , vector<int>(sum+1 , -1));
-        for(int i=0;i<n+1;i++){
-            for(int j=0;j<sum+1;j++){
-                if(i == 0 && j==0){
-                    dp[i][j] = true;
-                }else if(i == 0){
-                    dp[i][j] = false;
-                }else if(i == 0){
-                    dp[i][j] = true;
-                }
-            }
-        }
-        for(int i=1;i<n+1;i++){
+        vector<bool> dp(sum+1 , false);
+        dp[0] = true;
+        for(int i=0;i<n;i++){
+            vector<bool> temp(sum+1 , false);
+            temp[0] = true;
             for(int j=1;j<sum+1;j++){
-                if(nums[i-1] <= j){
-                    dp[i][j] = dp[i-1][j] || dp[i-1][j-nums[i-1]];
+                if(nums[i] <= j){
+                    temp[j] = dp[j] || dp[j-nums[i]];
                 }else{
-                    dp[i][j] = dp[i-1][j];
+                    temp[j] = dp[j];
                 }
             }
+            dp = temp;
         }
-        return dp[n][sum];
+        return dp[sum];
     }
 };
