@@ -41,31 +41,55 @@ public:
     
     
     // Tabulation
+    // int coinChange(vector<int>& coins, int amount) {
+    //     int n = coins.size();
+    //     vector<vector<int>> dp(n+1 , vector<int>(amount+1,INT_MAX));
+    //     for(int i=0;i<n+1;i++){
+    //         dp[i][0] = 0;
+    //     }
+    //     dp[0][0] = 0;
+    //     for(int i=1;i<n+1;i++){
+    //         for(int j=1;j<amount+1;j++){
+    //             int notTake = dp[i-1][j] , take = INT_MAX;
+    //             if(coins[i-1] <= j){
+    //                 take = min(dp[i][j-coins[i-1]] , dp[i-1][j-coins[i-1]]);
+    //                 if(take < INT_MAX){
+    //                     take+=1;
+    //                 }
+    //             }
+    //             dp[i][j] = min(take , notTake);
+    //         }
+    //     }
+    //     // for(int i=0;i<n+1;i++){
+    //     //     for(int j=0;j<amount+1;j++){
+    //     //         cout<<dp[i][j]<<" ";
+    //     //     }
+    //     //     cout<<endl;
+    //     // }
+    //     return dp[n][amount] == INT_MAX ? -1 : dp[n][amount];
+    // }
+    
+    
+    // Tabulation + optimization
     int coinChange(vector<int>& coins, int amount) {
         int n = coins.size();
-        vector<vector<int>> dp(n+1 , vector<int>(amount+1,INT_MAX));
-        for(int i=0;i<n+1;i++){
-            dp[i][0] = 0;
-        }
-        dp[0][0] = 0;
+        vector<int> dp(amount+1 , INT_MAX);
+        dp[0] = 0;
         for(int i=1;i<n+1;i++){
+            vector<int> temp(amount+1 , INT_MAX);
+            temp[0] = 0;
             for(int j=1;j<amount+1;j++){
-                int notTake = dp[i-1][j] , take = INT_MAX;
+                int notTake = dp[j] , take = INT_MAX;
                 if(coins[i-1] <= j){
-                    take = min(dp[i][j-coins[i-1]] , dp[i-1][j-coins[i-1]]);
+                    take = min(temp[j-coins[i-1]] , dp[j-coins[i-1]]);
                     if(take < INT_MAX){
                         take+=1;
                     }
                 }
-                dp[i][j] = min(take , notTake);
+                temp[j] = min(take , notTake);
             }
+            dp = temp;
         }
-        // for(int i=0;i<n+1;i++){
-        //     for(int j=0;j<amount+1;j++){
-        //         cout<<dp[i][j]<<" ";
-        //     }
-        //     cout<<endl;
-        // }
-        return dp[n][amount] == INT_MAX ? -1 : dp[n][amount];
+        return dp[amount] == INT_MAX ? -1 : dp[amount];
     }
 };
