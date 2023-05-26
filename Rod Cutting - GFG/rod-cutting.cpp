@@ -10,23 +10,46 @@ using namespace std;
 
 class Solution{
   public:
-    int solve(int price[] , int len , vector<int>& dp){
-        if(len < 0){
+//   Brute force approach and then optimize by memoization
+    // int solve(int price[] , int len , vector<int>& dp){
+    //     if(len < 0){
+    //         return 0;
+    //     }
+    //     if(dp[len] != -1){
+    //         return dp[len];
+    //     }
+    //     int ans = price[len];
+    //     for(int i=0;i<len;i++){
+    //         ans = max(ans , solve(price , i ,dp) + solve(price , len-i-1 ,dp));
+    //     }
+    //     return dp[len] = ans;
+    // }
+    // int cutRod(int price[], int n) {
+    //     //code here
+    //     vector<int> dp(n+1 , -1);
+    //     return solve(price , n-1 , dp);
+    // }
+    
+    
+    
+    // Now converting this problem into knapsack with given weight as N
+    int solve(int price[] , int index,int len , vector<vector<int>>& dp){
+        if(index < 0){
             return 0;
         }
-        if(dp[len] != -1){
-            return dp[len];
+        if(dp[index][len] != -1){
+            return dp[index][len];
         }
-        int ans = price[len];
-        for(int i=0;i<len;i++){
-            ans = max(ans , solve(price , i ,dp) + solve(price , len-i-1 ,dp));
+        int notTake = solve(price , index-1 , len , dp) , take=0;
+        if(len >= index+1){
+            take = price[index]+solve(price , index , len-index-1 , dp);
         }
-        return dp[len] = ans;
+        return dp[index][len] = max(take , notTake);
     }
     int cutRod(int price[], int n) {
         //code here
-        vector<int> dp(n+1 , -1);
-        return solve(price , n-1 , dp);
+        vector<vector<int>> dp(n , vector<int>(n+1 , -1));
+        return solve(price , n-1 , n , dp);
     }
     
 };
