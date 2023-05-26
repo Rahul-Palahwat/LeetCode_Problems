@@ -33,6 +33,28 @@ class Solution{
     
     
     // Now converting this problem into knapsack with given weight as N
+    // int solve(int price[] , int index,int len , vector<vector<int>>& dp){
+    //     if(index < 0){
+    //         return 0;
+    //     }
+    //     if(dp[index][len] != -1){
+    //         return dp[index][len];
+    //     }
+    //     int notTake = solve(price , index-1 , len , dp) , take=0;
+    //     if(len >= index+1){
+    //         take = price[index]+solve(price , index , len-index-1 , dp);
+    //     }
+    //     return dp[index][len] = max(take , notTake);
+    // }
+    // int cutRod(int price[], int n) {
+    //     //code here
+    //     vector<vector<int>> dp(n , vector<int>(n+1 , -1));
+    //     return solve(price , n-1 , n , dp);
+    // }
+    
+    
+    
+    // Tabulation 
     int solve(int price[] , int index,int len , vector<vector<int>>& dp){
         if(index < 0){
             return 0;
@@ -48,10 +70,22 @@ class Solution{
     }
     int cutRod(int price[], int n) {
         //code here
-        vector<vector<int>> dp(n , vector<int>(n+1 , -1));
-        return solve(price , n-1 , n , dp);
+        vector<vector<int>> dp(n+1 , vector<int>(n+1 , -1));
+        for(int i=0;i<n+1;i++){
+            dp[i][0] = 1;
+        }
+        // dp[0][0]=0;
+        for(int i=1;i<n+1;i++){
+            for(int j=1;j<n+1;j++){
+                int notTake = dp[i-1][j] , take = 0;
+                if(j>= i){
+                    take = price[i-1]+dp[i][j-i];
+                }
+                dp[i][j] = max(take , notTake);
+            }
+        }
+        return dp[n][n]-1;
     }
-    
 };
 
 //{ Driver Code Starts.
