@@ -54,23 +54,25 @@ class Solution{
     
     
     
-    // Tabulation 
+    // Tabulation + Optimization
     int cutRod(int price[], int n) {
         //code here
-        vector<vector<int>> dp(n , vector<int>(n+1 , 0));
+        vector<int> dp(n+1 , 0);
         for(int i=0;i<n+1;i++){
-            dp[0][i] = i*price[0];
+            dp[i] = i*price[0];
         }
         for(int i=1;i<n;i++){
+            vector<int> temp(n+1 , 0);
             for(int j=1;j<n+1;j++){
-                int notTake = dp[i-1][j] , take = 0;
+                int notTake = dp[j] , take = 0;
                 if(j>=i+1){
-                    take = price[i]+dp[i][j-i-1];
+                    take = price[i]+temp[j-i-1];
                 }
-                dp[i][j] = max(take , notTake);
+                temp[j] = max(take , notTake);
             }
+            dp = temp;
         }
-        return dp[n-1][n];
+        return dp[n];
     }
 };
 
