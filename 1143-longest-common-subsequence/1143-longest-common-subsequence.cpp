@@ -8,13 +8,14 @@ public:
     //     if(dp[n][m] != -1){
     //         return dp[n][m];
     //     }
-    //     int notTake1 = solve(s1 , s2 , n-1 , m , dp);
-    //     int notTake2 = solve(s1 , s2, n , m-1 , dp);
-    //     int take = INT_MIN;
+    //     int take = INT_MIN , notTake = INT_MIN;
     //     if(s1[n] == s2[m]){
     //         take = 1 + solve(s1 , s2 , n-1 , m-1 , dp);
+    //     }else{
+    //         notTake = solve(s1 , s2 , n-1 , m , dp);
+    //         notTake = max(notTake , solve(s1 , s2, n , m-1 , dp));
     //     }
-    //     return dp[n][m] = max(take , max(notTake1 , notTake2));
+    //     return dp[n][m] = max(take , notTake);
     // }
     // int longestCommonSubsequence(string text1, string text2) {
     //     int n = text1.length() , m = text2.length();
@@ -26,14 +27,28 @@ public:
     // Tabulation 
     int longestCommonSubsequence(string text1, string text2) {
         int n = text1.length() , m = text2.length();
+        string ans ="";
         vector<vector<int>> dp(n+1 , vector<int>(m+1, 0));
         for(int i=1;i<n+1;i++){
             for(int j=1;j<m+1;j++){
-                int notTake1 = dp[i-1][j] , take = INT_MIN , notTake2 = dp[i][j-1];
                 if(text1[i-1] == text2[j-1]){
-                    take = 1+dp[i-1][j-1];
+                    dp[i][j] = 1+dp[i-1][j-1];
+                }else{
+                    dp[i][j] = max(dp[i-1][j] , dp[i][j-1]);
                 }
-                dp[i][j] = max(take , max(notTake1 , notTake2));
+                
+            }
+        }
+        int i = n , j = m;
+        while(i>0 && j>0){
+            if(dp[i][j] > max(dp[i-1][j] , dp[i][j-1])){
+                ans+=text1[i-1];
+                i--;
+                j--;
+            }else if(dp[i][j] == dp[i-1][j]){
+                i--;
+            }else{
+                j--;
             }
         }
         return dp[n][m];
