@@ -31,46 +31,50 @@ public:
     
     
     // Tabulation
-    int minDistance(string word1, string word2) {
-        int n = word1.size() , m = word2.size();
-        vector<vector<int>> dp(n+1 , vector<int>(m+1 , 0));
-        for(int i=1;i<n+1;i++){
-            dp[i][0] = i;
-        }
-        for(int i=1;i<m+1;i++){
-            dp[0][i] = i;
-        }
-        for(int i=1;i<=n;i++){
-            for(int j=1;j<=m;j++){
-                if(word1[i-1] == word2[j-1]){
-                    dp[i][j] = dp[i-1][j-1];
-                }else{
-                    dp[i][j] = 1+min(dp[i-1][j-1] , min(dp[i][j-1] , dp[i-1][j]));
-                }
-            }
-        }
-        return dp[n][m];
-    }
-    
-    
-    // Tabulation + Optimization
     // int minDistance(string word1, string word2) {
     //     int n = word1.size() , m = word2.size();
-    //     vector<int> dp(m+1 , 0) , cur(m+1 , 0);
-    //     for(int i=1;i<=m;i++){
-    //         dp[i] = i;
+    //     vector<vector<int>> dp(n+1 , vector<int>(m+1 , 0));
+    //     for(int i=1;i<n+1;i++){
+    //         dp[i][0] = i;
+    //     }
+    //     for(int i=1;i<m+1;i++){
+    //         dp[0][i] = i;
     //     }
     //     for(int i=1;i<=n;i++){
     //         for(int j=1;j<=m;j++){
-    //             int notTaken = 1+min(dp[j-1] , min(cur[j-1] , dp[j]));
-    //             int taken = INT_MAX;
     //             if(word1[i-1] == word2[j-1]){
-    //                 taken = dp[j-1];
+    //                 dp[i][j] = dp[i-1][j-1];
+    //             }else{
+    //                 dp[i][j] = 1+min(dp[i-1][j-1] , min(dp[i][j-1] , dp[i-1][j]));
     //             }
-    //             cur[j] = min(taken , notTaken);
+    //             // cout<<dp[i][j]<<" ";
     //         }
-    //         dp = cur;
+    //         // cout<<endl;
     //     }
-    //     return dp[m];
+    //     return dp[n][m];
     // }
+    
+    
+    // Tabulation + Optimization
+    int minDistance(string word1, string word2) {
+        int n = word1.size() , m = word2.size();
+        vector<int> dp(m+1 , 0) , cur(m+1 , 0);
+        for(int i=0;i<=m;i++){
+            dp[i] = i;
+        }
+        for(int i=1;i<=n;i++){
+            cur[0]=i;
+            for(int j=1;j<=m;j++){
+                if(word1[i-1] == word2[j-1]){
+                    cur[j] = dp[j-1];
+                }else{
+                    cur[j] = 1+min(dp[j-1] , min(dp[j] , cur[j-1]));
+                }
+                // cout<<cur[j]<<" ";
+            }
+            // cout<<endl;
+            dp = cur;
+        }
+        return dp[m];
+    }
 };
