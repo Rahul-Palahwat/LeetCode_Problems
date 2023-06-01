@@ -42,14 +42,35 @@ public:
         }
         for(int i=1;i<=n;i++){
             for(int j=1;j<=m;j++){
-                int notTaken = 1+min(dp[i-1][j-1] , min(dp[i][j-1] , dp[i-1][j]));
-                int taken = INT_MAX;
                 if(word1[i-1] == word2[j-1]){
-                    taken = dp[i-1][j-1];
+                    dp[i][j] = dp[i-1][j-1];
+                }else{
+                    dp[i][j] = 1+min(dp[i-1][j-1] , min(dp[i][j-1] , dp[i-1][j]));
                 }
-                dp[i][j] = min(taken , notTaken);
             }
         }
         return dp[n][m];
     }
+    
+    
+    // Tabulation + Optimization
+    // int minDistance(string word1, string word2) {
+    //     int n = word1.size() , m = word2.size();
+    //     vector<int> dp(m+1 , 0) , cur(m+1 , 0);
+    //     for(int i=1;i<=m;i++){
+    //         dp[i] = i;
+    //     }
+    //     for(int i=1;i<=n;i++){
+    //         for(int j=1;j<=m;j++){
+    //             int notTaken = 1+min(dp[j-1] , min(cur[j-1] , dp[j]));
+    //             int taken = INT_MAX;
+    //             if(word1[i-1] == word2[j-1]){
+    //                 taken = dp[j-1];
+    //             }
+    //             cur[j] = min(taken , notTaken);
+    //         }
+    //         dp = cur;
+    //     }
+    //     return dp[m];
+    // }
 };
