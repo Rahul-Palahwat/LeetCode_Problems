@@ -45,21 +45,39 @@ public:
     
     
     // Tabulation + Optimization 2 Arrays
+    // int numDistinct(string s, string t) {
+    //     int n = s.size() , m = t.size();
+    //     vector<double> dp(m+1 , 0);
+    //     vector<double> cur(m+1 , 0);
+    //     dp[0]=1;
+    //     cur[0]=1;
+    //     for(int i=1;i<n+1;i++){
+    //         for(int j=1;j<m+1;j++){
+    //             if(s[i-1] == t[j-1]){
+    //                 cur[j] = dp[j-1]+dp[j];
+    //             }else{
+    //                 cur[j] = dp[j];
+    //             }
+    //         }
+    //         dp = cur;
+    //     }
+    //     return (int)dp[m];
+    // }
+    
+    
+    // Tabulation + 1D Array Optimization
     int numDistinct(string s, string t) {
         int n = s.size() , m = t.size();
         vector<double> dp(m+1 , 0);
-        vector<double> cur(m+1 , 0);
         dp[0]=1;
-        cur[0]=1;
         for(int i=1;i<n+1;i++){
-            for(int j=1;j<m+1;j++){
+            for(int j=m;j>0;j--){
                 if(s[i-1] == t[j-1]){
-                    cur[j] = dp[j-1]+dp[j];
+                    dp[j] = dp[j-1]+dp[j];
                 }else{
-                    cur[j] = dp[j];
+                    dp[j] = dp[j];
                 }
             }
-            dp = cur;
         }
         return (int)dp[m];
     }
