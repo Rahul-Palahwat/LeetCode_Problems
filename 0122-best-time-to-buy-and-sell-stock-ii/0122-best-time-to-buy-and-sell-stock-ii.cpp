@@ -29,41 +29,39 @@ public:
     
     
     // Tabulation
-    int maxProfit(vector<int>& prices) {
-        int n = prices.size();
-        vector<vector<int>> dp(n+1 , vector<int>(2,0));
-        dp[n][0] = 0 , dp[n][1] = 0;
-        for(int index=n-1;index>=0;index--){
-            for(int check=0;check<=1;check++){
-                int profit = INT_MIN;
-                if(check){
-                    int notTaken = dp[index+1][1];
-                    int taken =prices[index] + dp[index+1][0];
-                    profit = max(notTaken , taken);
-                }else{
-                    int notTaken = dp[index+1][0];
-                    int taken = - prices[index] + dp[index+1][1];
-                    profit = max(taken , notTaken);
-                }
-                dp[index][check] = profit;
-            }
-        }
-        return dp[0][0];
-    }
-    
-    
-    
     // int maxProfit(vector<int>& prices) {
-    //     int n =prices.size();
-    //     vector<int> dp(n , 0);
-    //     dp[0] = 0;
-    //     for(int i=1;i<n;i++){
-    //         if(prices[i]-prices[i-1] > 0){
-    //             dp[i] = dp[i-1]+(prices[i]-prices[i-1]);
-    //         }else{
-    //             dp[i] = dp[i-1];
+    //     int n = prices.size();
+    //     vector<vector<int>> dp(n+1 , vector<int>(2,0));
+    //     dp[n][0] = 0 , dp[n][1] = 0;
+    //     for(int index=n-1;index>=0;index--){
+    //         for(int check=0;check<=1;check++){
+    //             int profit = INT_MIN;
+    //             if(check){
+    //                 int notTaken = dp[index+1][1];
+    //                 int taken =prices[index] + dp[index+1][0];
+    //                 profit = max(notTaken , taken);
+    //             }else{
+    //                 int notTaken = dp[index+1][0];
+    //                 int taken = - prices[index] + dp[index+1][1];
+    //                 profit = max(taken , notTaken);
+    //             }
+    //             dp[index][check] = profit;
     //         }
     //     }
-    //     return dp[n-1];
+    //     return dp[0][0];
     // }
+    
+    
+    
+    // More Optimized
+    int maxProfit(vector<int>& prices) {
+        int n =prices.size();
+        int prev = 0;
+        for(int i=1;i<n;i++){
+            if(prices[i]-prices[i-1] > 0){
+                prev = prev+(prices[i]-prices[i-1]);
+            }
+        }
+        return prev;
+    }
 };
