@@ -43,8 +43,12 @@ class Solution
 	        return;
 	    }
 	    ans = min(ans , abs(K - root->data));
-	    solve(root->left , K);
-	    solve(root->right , K);
+	    if(root->data > K){
+	        solve(root->left , K);
+	    }else{
+	        solve(root->right , K);
+	    }
+	    
 	    return;
 	}
     int minDiff(Node *root, int K)
