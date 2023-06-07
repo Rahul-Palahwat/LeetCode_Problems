@@ -34,7 +34,7 @@ public:
         }
         int ans = 0;
         if(taken){
-            ans = max(nums[index]+solve(index-1 , taken , nums , dp) , 0);
+            ans = max(nums[index]+solve(index-1 , taken , nums ,dp) , 0);
         }else{
             ans = max(nums[index]+solve(index-1 , true , nums , dp) , solve(index-1 , taken , nums , dp));
         }
