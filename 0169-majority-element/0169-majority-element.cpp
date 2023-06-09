@@ -44,9 +44,7 @@ public:
             if(cnt == 0){
                 ele = nums[i];
                 cnt=1;
-                continue;
-            }
-            if(nums[i] != ele){
+            }else if(nums[i] != ele){
                 cnt--;
             }else{
                 cnt++;
