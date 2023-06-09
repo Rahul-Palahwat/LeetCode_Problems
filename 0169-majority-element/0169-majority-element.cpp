@@ -37,29 +37,29 @@ public:
     
     // Using Moore's Voting Algorithm
     int majorityElement(vector<int>& nums) {
-        int cnt=1;
+        int cnt=0;
         int n = nums.size();
-        int start=nums[0];
-        for(int i=1;i<n;i++){
-            if(nums[i] != start){
+        int ele;
+        for(int i=0;i<n;i++){
+            if(cnt == 0){
+                ele = nums[i];
+                cnt=1;
+                continue;
+            }
+            if(nums[i] != ele){
                 cnt--;
             }else{
                 cnt++;
             }
-            if(cnt == 0 && i<n){
-                start = nums[i+1];
-                cnt=1;
-                i++;
-            }
         }
         cnt=0;
         for(auto it: nums){
-            if(it == start){
+            if(it == ele){
                 cnt++;
             }
         }
         if(cnt > n/2){
-            return start;
+            return ele;
         }
         return -1;
     }
