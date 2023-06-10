@@ -13,19 +13,12 @@ public:
         }
         return (j == s2.size());
     }
+    bool static comp(string &s1 , string &s2){
+        return s1.size()<s2.size();
+    }
     int longestStrChain(vector<string>& words) {
         int n = words.size();
-        map<int,vector<string>> mp;
-        for(auto it: words){
-            mp[it.size()].push_back(it);
-        }
-        int index=0;
-        for(auto it: mp){
-            for(auto i:it.second){
-                words[index] = i;
-                index++;
-            }
-        }
+        sort(words.begin() , words.end() , comp);
         int ans = 1;
         vector<int> dp(n , 1);
         for(int i=1;i<n;i++){
