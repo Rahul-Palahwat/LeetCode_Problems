@@ -1,21 +1,25 @@
 class Solution {
 public:
-    int dp[102][102] = {};
-int dfs(vector<int>& cuts, int i, int j) {
-    if (j - i <= 1)
-        return 0;
-    if (!dp[i][j]) {
-        dp[i][j] = INT_MAX;
-        for (auto k = i + 1; k < j; ++k)
-            dp[i][j] = min(dp[i][j], 
-                cuts[j] - cuts[i] + dfs(cuts, i, k) + dfs(cuts, k, j));
+    int solve(vector<int> &cuts , int i , int j, vector<vector<int>> &dp){
+        if(i > j){
+            return 0;
+        }
+        if(dp[i][j] != -1){
+            return dp[i][j];
+        }
+        int mini = INT_MAX;
+        for(int k=i;k<=j;k++){
+            int cost = cuts[j+1]-cuts[i-1]+solve(cuts , i , k-1 , dp)+solve(cuts , k+1 , j , dp);
+            mini = min(mini , cost);
+        }
+        return dp[i][j] = mini;
     }
-    return dp[i][j];
-}
-int minCost(int n, vector<int>& cuts) {
-    cuts.push_back(0);
-    cuts.push_back(n);
-    sort(begin(cuts), end(cuts));
-    return dfs(cuts, 0, cuts.size() - 1);
-}
+    int minCost(int n, vector<int>& cuts) {
+        cuts.push_back(n);
+        cuts.push_back(0);
+        sort(cuts.begin() , cuts.end());
+        int sz = cuts.size();
+        vector<vector<int>> dp(sz , vector<int>(sz , -1));
+        return solve(cuts , 1 , sz-2 , dp);
+    }
 };
