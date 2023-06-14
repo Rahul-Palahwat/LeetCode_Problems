@@ -54,7 +54,33 @@ public:
     
     
     
-    // MCM Recursion
+    // MCM Recursion + Memoization
+    // int solve(vector<int>& nums , int i , int j, vector<vector<int>> &dp){
+    //     if(i>j){
+    //         return 0;
+    //     }
+    //     if(dp[i][j] != -1){
+    //         return dp[i][j];
+    //     }
+    //     int ans = INT_MIN;
+    //     for(int k=i;k<=j;k++){
+    //         int temp = nums[i-1]*nums[k]*nums[j+1] + solve(nums,i,k-1,dp)+solve(nums , k+1 , j , dp);
+    //         ans = max(ans , temp);
+    //     }
+    //     return dp[i][j] = ans;
+    // }
+    // int maxCoins(vector<int>& nums) {
+    //     nums.push_back(1);
+    //     nums.insert(nums.begin()+0 , 1);
+    //     int n = nums.size();
+    //     vector<vector<int>> dp(n , vector<int>(n,-1));
+    //     return solve(nums , 1 , nums.size()-2 , dp);
+    // }
+    
+    
+    
+    
+    // Tabulation
     int solve(vector<int>& nums , int i , int j, vector<vector<int>> &dp){
         if(i>j){
             return 0;
@@ -64,17 +90,27 @@ public:
         }
         int ans = INT_MIN;
         for(int k=i;k<=j;k++){
-            // cout<<i-1<<" "<<k<<" "<<j+1<<" "<<nums.size()-1<<endl;
-            int temp = nums[i-1]*nums[k]*nums[j+1] + solve(nums , i , k-1 , dp) + solve(nums , k+1 , j , dp);
+            int temp = nums[i-1]*nums[k]*nums[j+1] + solve(nums,i,k-1,dp)+solve(nums , k+1 , j , dp);
             ans = max(ans , temp);
         }
         return dp[i][j] = ans;
     }
     int maxCoins(vector<int>& nums) {
+        int sz = nums.size();
         nums.push_back(1);
         nums.insert(nums.begin()+0 , 1);
         int n = nums.size();
-        vector<vector<int>> dp(n , vector<int>(n,-1));
-        return solve(nums , 1 , nums.size()-2 , dp);
+        vector<vector<int>> dp(n , vector<int>(n,0));
+        for(int i = sz;i > 0;i--){
+            for(int j=i;j<=sz;j++){
+                int ans = INT_MIN;
+                for(int k=i;k<=j;k++){
+                    int temp = nums[i-1]*nums[k]*nums[j+1] + dp[i][k-1]+dp[k+1][j];
+                    ans = max(ans , temp);
+                }
+                dp[i][j] = ans;
+            }
+        }
+        return dp[1][sz];
     }
 };
