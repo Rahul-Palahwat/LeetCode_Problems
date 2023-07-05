@@ -26,27 +26,41 @@ public:
     //     vector<int> ans(k , 0);
     //     return solve(cookies  , 0 , ans);
     // }
-    int ans = INT_MAX;
-    void solve(int start, vector<int>& nums, vector<int>& v, int k){
-        if(start==nums.size()){
-            int maxm = INT_MIN;
-            for(int i=0;i<k;i++){
-                maxm = max(maxm,v[i]);
-            }
-            ans = min(ans,maxm);
-            return;
-        }
-        for(int i=0;i<k;i++){
-            v[i] += nums[start];
-            solve(start+1,nums,v,k);
-            v[i] -= nums[start];
-        }
-    }
     
-    int distributeCookies(vector<int>& nums, int k) { // nums is the cookies vector
-        int n = nums.size();
-        vector<int> v(k,0); // v is to store each sum of the k subsets
-        solve(0,nums,v,k);
+    
+    // BinarySearch Approach
+    bool possible(int mid , int k , vector<int>& nums){
+        int sum = 0;
+        for(auto it: nums){
+            sum+=it;
+            if(sum > mid){
+                sum = it;
+                k--;
+            }
+        }
+        return (k == 0 && sum == 0) || k>0;
+    }
+    int BinarySearch(vector<int>& nums , int start , int end , int k){
+        int ans = INT_MAX;
+        while(start <= end){
+            int mid = (start+end)/2;
+            if(possible(mid , k , nums)){
+                ans = mid;
+                end = mid-1;
+            }else{
+                start = mid+1;
+            }
+        }
+        return ans;
+    }
+    int distributeCookies(vector<int>& nums, int k) {
+        sort(nums.begin() , nums.end());
+        int start = *max_element(nums.begin() , nums.end());
+        int end = accumulate(nums.begin(), nums.end() , 0);
+        int ans= INT_MAX;
+        do{
+            ans = min(ans , BinarySearch(nums , start, end , k));
+        }while(next_permutation(nums.begin() , nums.end()));
         return ans;
     }
 };
