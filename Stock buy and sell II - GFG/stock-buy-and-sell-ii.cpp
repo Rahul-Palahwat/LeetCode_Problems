@@ -31,6 +31,8 @@ public:
 
 class Solution {
   public:
+  
+//   Recursion + Memoization
     // int solve(int index , bool hasPrev , vector<int>& prices , vector<vector<int>> &dp){
     //     if(index == prices.size()){
     //         return 0;
@@ -50,6 +52,24 @@ class Solution {
     //     vector<vector<int>> dp(n , vector<int>(2 , -1));
     //     return solve(0 , 0 , prices , dp);
     // }
+    
+    
+    // Tabulation
+    int stockBuyAndSell(int n, vector<int> &prices) {
+        // code here
+        vector<vector<int>> dp(n+1 , vector<int>(2 , 0));
+        for(int index = n-1;index >= 0;index--){
+            for(int hasPrev = 1;hasPrev >= 0;hasPrev--){
+                int notTaken = dp[index+1][hasPrev];
+                if(!hasPrev){
+                    dp[index][hasPrev] = max(-prices[index]+dp[index+1][!hasPrev], notTaken);
+                }else{
+                    dp[index][hasPrev] = max(prices[index]+dp[index+1][!hasPrev] , notTaken);
+                }
+            }
+        }
+        return dp[0][0];
+    }
 };
 
 
