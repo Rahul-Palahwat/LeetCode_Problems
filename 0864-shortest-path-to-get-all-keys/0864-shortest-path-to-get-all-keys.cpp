@@ -1,132 +1,223 @@
 class Solution {
 public:
-    // int solve(int cnt , int i , int j , vector<string>& grid, map<char,int> mp , vector<vector<int>> &dp , vector<vector<bool>> vis){
-    //     int n = grid.size();
-    //     int m = grid[0].size();
-    //     if(cnt == 0){
-    //         return 0;
-    //     }
-    //     if(dp[i][j] != -1){
-    //         return dp[i][j];
-    //     }
-    //     if(vis[i][j]){
-    //         return INT_MAX;
-    //     }
-    //     vis[i][j] = true;
-    //     int ans = INT_MAX;
-    //     if(i+1 < n){
-    //         if(grid[i+1][j] == 'a' || grid[i+1][j] == 'b' || grid[i+1][j] == 'c' || grid[i+1][j] == 'd' || grid[i+1][j] == 'e' || grid[i+1][j] == 'f'){
-    //             mp[grid[i+1][j]]=1;
-    //             ans = min(ans , 1+solve(cnt-1 , i+1 , j , grid , mp , dp , vis));
-    //             mp.erase(grid[i+1][j]);
-    //         }else if(grid[i+1][j] == 'A' || grid[i+1][j] == 'B' || grid[i+1][j] == 'C' || grid[i+1][j] == 'D' || grid[i+1][j] == 'E' || grid[i+1][j] == 'F'){
-    //             if(mp.find(grid[i+1][j]+32) != mp.end()){
-    //                 ans = min(ans , 1+solve(cnt , i+1 , j , grid, mp , dp , vis));
+    
+    // int solve(int i , int j , vector<string>& grid , int bit){
+    //     int n = grid.size(), m=grid[0].size();
+    //     queue<vector<int>> q;
+    //     int ans = 0;
+    //     unordered_set<string> st;
+    //     q.push({i,j,0});
+    //     while(!q.empty()){
+    //         int sz = q.size();
+    //         while(sz--){
+    //             auto top = q.front();
+    //             q.pop();
+    //             int x=top[0],y=top[1],mask = top[2];
+    //             string t = to_string(x)+" "+to_string(y)+" "+to_string(mask);
+    //             if(st.find(t) != st.end()){
+    //                 continue;
     //             }
-    //         }else if(grid[i+1][j] == '.'){
-    //             ans = min(ans , 1+solve(cnt , i+1 , j , grid , mp , dp , vis));
-    //         }
-    //     }
-    //     if(j+1 < m){
-    //         if(grid[i][j+1] == 'a' || grid[i][j+1] == 'b' || grid[i][j+1] == 'c' || grid[i][j+1] == 'd' || grid[i][j+1] == 'e' || grid[i][j+1] == 'f'){
-    //             mp[grid[i][j+1]]=1;
-    //             ans = min(ans , 1+solve(cnt-1 , i , j+1 , grid , mp , dp , vis));
-    //             mp.erase(grid[i][j+1]);
-    //         }else if(grid[i][j+1] == 'A' || grid[i][j+1] == 'B' || grid[i][j+1] == 'C' || grid[i][j+1] == 'D' || grid[i][j+1] == 'E' || grid[i][j+1] == 'F'){
-    //             if(mp.find(grid[i][j+1]+32) != mp.end()){
-    //                 ans = min(ans , 1+solve(cnt , i , j+1 , grid, mp , dp , vis));
+    //             st.insert(t);
+    //             if(bit == mask){
+    //                 return ans;
     //             }
-    //         }else if(grid[i][j+1] == '.'){
-    //             ans = min(ans , 1+solve(cnt , i , j+1 , grid , mp, dp , vis));
-    //         }
-    //     }
-    //     if(i-1 >= 0){
-    //         if(grid[i-1][j] == 'a' || grid[i-1][j] == 'b' || grid[i-1][j] == 'c' || grid[i-1][j] == 'd' || grid[i-1][j] == 'e' || grid[i-1][j] == 'f'){
-    //             mp[grid[i-1][j]]=1;
-    //             ans = min(ans , 1+solve(cnt-1 , i-1 , j , grid , mp , dp , vis));
-    //             mp.erase(grid[i-1][j]);
-    //         }else if(grid[i-1][j] == 'A' || grid[i-1][j] == 'B' || grid[i-1][j] == 'C' || grid[i-1][j] == 'D' || grid[i-1][j] == 'E' || grid[i-1][j] == 'F'){
-    //             if(mp.find(grid[i-1][j]+32) != mp.end()){
-    //                 ans = min(ans , 1+solve(cnt , i-1 , j , grid, mp , dp , vis));
+    //             grid[x][y] = mask+104;
+    //             // cout<<grid[x][y]<<" mask "<<mask<<endl;
+    //             if(x+1 < n && grid[x+1][y] != '#'){
+    //                 if(grid[x+1][y] == 'a' || grid[x+1][y] == 'b' || grid[x+1][y] == 'c' || grid[x+1][y] == 'd' || grid[x+1][y] == 'e' || grid[x+1][y] == 'f'){
+    //                     int index = grid[x+1][y]-'a'+1;
+    //                     int temp = mask;
+    //                     temp|=(1<<index);
+    //                     q.push({x+1 , y , temp});
+    //                 }
+    //                 else if(grid[x+1][y] == 'A' || grid[x+1][y] == 'B' || grid[x+1][y] == 'C' || grid[x+1][y] == 'D' || grid[x+1][y] == 'E' || grid[x+1][y] == 'F'){
+    //                     int index = grid[x+1][y]-'A'+1;
+    //                     int no = (1<<index);
+    //                     if(no&mask){
+    //                         q.push({x+1 , y , mask});
+    //                     }
+    //                 }else{
+    //                     q.push({x+1 , y , mask});
+    //                 }
     //             }
-    //         }else if(grid[i-1][j] == '.'){
-    //             ans = min(ans , 1+solve(cnt , i-1 , j , grid , mp , dp , vis));
-    //         }
-    //     }
-    //     if(j-1 >= 0){
-    //         if(grid[i][j-1] == 'a' || grid[i][j-1] == 'b' || grid[i][j-1] == 'c' || grid[i][j-1] == 'd' || grid[i][j-1] == 'e' || grid[i][j-1] == 'f'){
-    //             mp[grid[i][j-1]]=1;
-    //             ans = min(ans , 1+solve(cnt-1 , i , j-1 , grid , mp , dp , vis));
-    //             mp.erase(grid[i][j-1]);
-    //         }else if(grid[i][j-1] == 'A' || grid[i][j-1] == 'B' || grid[i][j-1] == 'C' || grid[i][j-1] == 'D' || grid[i][j-1] == 'E' || grid[i][j-1] == 'F'){
-    //             if(mp.find(grid[i][j-1]+32) != mp.end()){
-    //                 ans = min(ans , 1+solve(cnt , i , j-1 , grid, mp , dp , vis));
+    //             if(x-1 >= 0 && grid[x-1][y] != '#'){
+    //                 if(grid[x-1][y] == 'a' || grid[x-1][y] == 'b' || grid[x-1][y] == 'c' || grid[x-1][y] == 'd' || grid[x-1][y] == 'e' || grid[x-1][y] == 'f'){
+    //                     int index = grid[x-1][y]-'a'+1;
+    //                     int temp = mask;
+    //                     temp|=(1<<index);
+    //                     q.push({x-1 , y , temp});
+    //                 }
+    //                 else if(grid[x-1][y] == 'A' || grid[x-1][y] == 'B' || grid[x-1][y] == 'C' || grid[x-1][y] == 'D' || grid[x-1][y] == 'E' || grid[x-1][y] == 'F'){
+    //                     int index = grid[x-1][y]-'A'+1;
+    //                     int no = (1<<index);
+    //                     if(no&mask){
+    //                         q.push({x-1 , y , mask});
+    //                     }
+    //                 }else{
+    //                     q.push({x-1 , y , mask});
+    //                 }
     //             }
-    //         }else if(grid[i][j-1] == '.'){
-    //             ans = min(ans , 1+solve(cnt , i , j-1 , grid , mp , dp , vis));
+    //             if(y+1 < m && grid[x][y+1] != '#'){
+    //                 if(grid[x][y+1] == 'a' || grid[x][y+1] == 'b' || grid[x][y+1] == 'c' || grid[x][y+1] == 'd' || grid[x][y+1] == 'e' || grid[x][y+1] == 'f'){
+    //                     int index = grid[x][y+1]-'a'+1;
+    //                     int temp = mask;
+    //                     temp|=(1<<index);
+    //                     q.push({x , y+1 , temp});
+    //                 }
+    //                 else if(grid[x][y+1] == 'A' || grid[x][y+1] == 'B' || grid[x][y+1] == 'C' || grid[x][y+1] == 'D' || grid[x][y+1] == 'E' || grid[x][y+1] == 'F'){
+    //                     int index = grid[x][y+1]-'A'+1;
+    //                     int no = (1<<index);
+    //                     if(no&mask){
+    //                         q.push({x , y+1 , mask});
+    //                     }
+    //                 }else{
+    //                     q.push({x , y+1 , mask});
+    //                 }
+    //             }
+    //             if(y-1 >= 0 && grid[x][y-1] != '#'){
+    //                 if(grid[x][y-1] == 'a' || grid[x][y-1] == 'b' || grid[x][y-1] == 'c' || grid[x][y-1] == 'd' || grid[x][y-1] == 'e' || grid[x][y-1] == 'f'){
+    //                     int index = grid[x][y-1]-'a'+1;
+    //                     int temp = mask;
+    //                     temp|=(1<<index);
+    //                     q.push({x , y-1 , temp});
+    //                 }
+    //                 else if(grid[x][y-1] == 'A' || grid[x][y-1] == 'B' || grid[x][y-1] == 'C' || grid[x][y-1] == 'D' || grid[x][y-1] == 'E' || grid[x][y-1] == 'F'){
+    //                     int index = grid[x][y-1]-'A'+1;
+    //                     int no = (1<<index);
+    //                     if(no&mask){
+    //                         q.push({x , y-1 , mask});
+    //                     }
+    //                 }else{
+    //                     q.push({x , y-1 , mask});
+    //                 }
+    //             }
     //         }
+    //         ans++;
     //     }
-    //     return dp[i][j] = ans;
+    //     return -1;
+    // }
+    
+    
+    // vector<vector<int>> dirs = {{-1,0},{1,0},{0,-1},{0,1}};
+    // int solve(int i , int j , vector<string>& grid , int bit){
+    //     int n = grid.size() , m = grid[0].size();
+    //     queue<vector<int>> q;
+    //     q.push({i , j , 0});
+    //     int ans = 0;
+    //     unordered_set<string> vis;
+    //     string t = to_string(i)+" "+to_string(j)+" "+to_string(0);
+    //     vis.insert(t);
+    //     while(!q.empty()){
+    //         int sz = q.size();
+    //         while(sz--){
+    //             auto top = q.front();
+    //             q.pop();
+    //             int mask = top[2];
+    //             if(mask == bit){
+    //                 return ans;
+    //             }
+    //             int temp;
+    //             for(auto it: dirs){
+    //                 int x = top[0]+it[0];
+    //                 int y = top[1]+it[1];
+    //                 if(x>=0 && x<n && y>=0 && y<m){
+    //                     char ch = grid[x][y];
+    //                     if(ch == '#'){
+    //                         continue;
+    //                     }else if(ch >= 'a' && ch <= 'f'){
+    //                         // temp = mask;
+    //                         int index = ch-'a'+1;
+    //                         mask|=(1<<index);
+    //                     }else if(ch >='A' && ch <= 'F'){
+    //                         int index = ch-'A'+1;
+    //                         int noo = (1<<index);
+    //                         if((mask & noo) == 0){
+    //                             continue;
+    //                         }
+    //                     }
+    //                     string tt = to_string(x)+" "+to_string(y)+" "+to_string(mask);
+    //                     if(!vis.count(tt)){
+    //                         vis.insert(tt);
+    //                         q.push({x,y,mask});
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         ans++;
+    //     }
+    //     return -1;
     // }
     // int shortestPathAllKeys(vector<string>& grid) {
-    //     int n = grid.size() , m = grid[0].size();
-    //     int cnt = 0 , starti ,startj;
+    //     int n = grid.size() , m = grid[0].size(), x,y;
+    //     int bitMask = 0;
     //     for(int i=0;i<n;i++){
     //         for(int j=0;j<m;j++){
     //             if(grid[i][j] == '@'){
-    //                 starti = i;
-    //                 startj = j;
+    //                 x=i;
+    //                 y=j;
     //             }
     //             if(grid[i][j] == 'a' || grid[i][j] == 'b' || grid[i][j] == 'c' || grid[i][j] == 'd' || grid[i][j] == 'e' || grid[i][j] == 'f'){
-    //                 cnt++;
+    //                 int index = grid[i][j]-'a'+1;
+    //                 bitMask|=(1<<index);
     //             }
     //         }
     //     }
-    //     vector<vector<int>> dp(n , vector<int>(m , -1));
-    //     vector<vector<bool>> vis(n , vector<int>(m , false));
-    //     map<char , int> mp;
-    //     return solve(cnt , starti , startj , grid, mp , dp , vis);
+    //     // vector<vector<vector<int>>> dp(n , vector<vector<int>>(m , vector<int>(bitMask+1 , -1)));
+    //     return solve(x,y,grid,bitMask);
     // }
+    
+    
+    
+    
     int shortestPathAllKeys(vector<string>& grid) {
-    int m=grid.size(), n=m?grid[0].size():0;
-    if(!m || !n) return 0;
-    int path=0, K=0;
-    vector<int> dirs={0,-1,0,1,0};
-    vector<vector<vector<bool>>> visited(m,vector<vector<bool>>(n,vector<bool>(64,0))); //at most 6 keys, using bitmap 111111
-    queue<pair<int,int>> q; //<postion, hold keys mapping>
-    for(int i=0;i<m;i++){
-        for(int j=0;j<n;j++){
-            if(grid[i][j]=='@'){
-                q.push({i*n+j,0});
-                visited[i][j][0]=1;                    
-            }
-            if(grid[i][j]>='A' && grid[i][j]<='F') K++; //total alpha number
-        }
-    }
-    while(!q.empty()){
-        int size=q.size();
-        for(int i=0;i<size;i++){
-            int a=q.front().first/n, b=q.front().first%n;
-            int carry=q.front().second;
-            q.pop();        
-            if(carry==((1<<K)-1)) return path; //if all keys hold, just return 
-            for(int j=0;j<4;j++){
-                int x=a+dirs[j], y=b+dirs[j+1], k=carry;
-                if(x<0 || x>=m || y<0 || y>=n || grid[x][y]=='#') continue;
-                if(grid[x][y]>='a' && grid[x][y]<='f'){
-                    k=carry|(1<<(grid[x][y]-'a')); //update hold keys
-                }
-                else if(grid[x][y]>='A' && grid[x][y]<='F'){
-                    if(!(carry & (1<<(grid[x][y]-'A')))) continue;
-                }
-                if(!visited[x][y][k]){
-                    visited[x][y][k]=1;
-                    q.push({x*n+y,k});
-               }                
-            }
-        }
-        path++;
-    }
-    return -1;
-    }
+int x = -1, y = -1, m = grid.size(), n = grid[0].size(), max_len = -1;
+for (int i = 0; i < m; ++i) {
+for (int j = 0; j < n; ++j) {
+char c = grid[i][j];
+if (c == '@') {
+x = i;
+y = j;
+}
+if (c >= 'a' && c <= 'f') {
+max_len = max(c - 'a' + 1, max_len);
+}
+}
+}
+vector<int> start = {0, x, y};
+queue<vector<int>> q;
+unordered_set<string> visited;
+visited.insert(to_string(0) + " " + to_string(x) + " " + to_string(y));
+q.push(start);
+int step = 0;
+vector<vector<int>> dirs {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
+while (!q.empty()) {
+int size = q.size();
+for (int k = 0; k < size; ++k) {
+vector<int> curr = q.front();
+q.pop();
+if (curr[0] == (1 << max_len) - 1)
+return step;
+for (auto &d : dirs) {
+int i = curr[1] + d[0];
+int j = curr[2] + d[1];
+int keys = curr[0];
+if (i >= 0 && i < m && j >= 0 && j < n) {
+char c = grid[i][j];
+if (c == '#') continue;
+if (c >= 'a' && c <= 'f')
+keys |= 1 << (c - 'a');
+if (c >= 'A' && c <= 'F' && ((keys >> (c - 'A')) & 1) == 0) {
+continue;
+}
+if (!visited.count(to_string(keys) + " " + to_string(i) + " " + to_string(j))) {
+visited.insert(to_string(keys) + " " + to_string(i) + " " + to_string(j));
+q.push({keys, i, j});
+}
+}
+}
+}
+++step;
+}
+return -1;
+}
 };
