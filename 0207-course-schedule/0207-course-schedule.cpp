@@ -2,7 +2,6 @@ class Solution {
 public:
     
     // solve by topological sort using DAG(Directed Acyclic Graph)
-    
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
         vector<int> g[numCourses];
         for(auto it: prerequisites){
@@ -32,10 +31,6 @@ public:
                 }
             }
         }
-        // for(auto it: ans){
-        //     cout<<it<<" ";
-        // }
-        // cout<<endl;
         if(ans.size() == numCourses){
             return true;
         }
