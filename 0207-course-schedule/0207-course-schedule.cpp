@@ -2,9 +2,9 @@ class Solution {
 public:
     
     // solve by topological sort using DAG(Directed Acyclic Graph)
-    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+    bool canFinish(int numCourses, vector<vector<int>>& pre) {
         vector<int> g[numCourses];
-        for(auto it: prerequisites){
+        for(auto it: pre){
             g[it[1]].push_back(it[0]);
         }
         vector<int> indegree(numCourses , 0);
@@ -14,7 +14,7 @@ public:
             }
         }
         queue<int> q;
-        vector<int> ans;
+        int cnt = 0;
         for(int i=0;i<numCourses;i++){
             if(indegree[i] == 0){
                 q.push(i);
@@ -23,7 +23,7 @@ public:
         while(!q.empty()){
             auto top = q.front();
             q.pop();
-            ans.push_back(top);
+            cnt++;
             for(auto it: g[top]){
                 indegree[it]--;
                 if(indegree[it] == 0){
@@ -31,9 +31,6 @@ public:
                 }
             }
         }
-        if(ans.size() == numCourses){
-            return true;
-        }
-        return false;
-    }
+        return cnt == numCourses;
+     }
 };
