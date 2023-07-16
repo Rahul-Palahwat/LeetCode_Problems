@@ -1,25 +1,99 @@
 class Solution {
 public:
-    vector<int> smallestSufficientTeam(vector<string>& req_skills, vector<vector<string>>& people) {
-        int n = req_skills.size();
-        unordered_map<int, vector<int>> dp;
-        dp.reserve(1 << n); // reserve space and avoid hash collisions
-        dp[0] = {};
-        unordered_map<string, int> skill_index;
-        for (int i = 0; i < req_skills.size(); ++i)
-            skill_index[req_skills[i]] = i;
-        for (int i = 0; i < people.size(); ++i) {
-            int cur_skill = 0;
-            for (auto& skill: people[i])
-                cur_skill |= 1 << skill_index[skill];
-            for (auto it = dp.begin(); it != dp.end(); ++it) {
-                int comb = it->first | cur_skill;
-                if (dp.find(comb) == dp.end() || dp[comb].size() > 1 + dp[it->first].size()) {
-                    dp[comb] = it->second;
-                    dp[comb].push_back(i);
-                }
-            }
+    // vector<int> temp;
+    // void solve(int index , vector<vector<string>>& people, map<string , int> mp , vector<int> ans){
+    //     if(index == people.size()){
+    //         if(mp.size() == 0){
+    //             if(temp.size() == 0){
+    //                 temp = ans;
+    //             }else{
+    //                 if(ans.size() < temp.size()){
+    //                     temp = ans;
+    //                 }
+    //             }
+    //         }
+    //         return;
+    //     }
+    //     solve(index+1 , people , mp , ans);
+    //     for(auto it: people[index]){
+    //         if(mp.find(it) != mp.end()){
+    //             mp[it]--;
+    //             if(mp[it] == 0){
+    //                 mp.erase(it);
+    //             }
+    //         }
+    //     }
+    //     ans.push_back(index);
+    //     solve(index+1 , people , mp , ans);
+    //     return;
+    // }
+    // vector<int> smallestSufficientTeam(vector<string>& req_skills, vector<vector<string>>& people) {
+    //     map<string , int> mp;
+    //     for(auto it: req_skills){
+    //         mp[it]++;
+    //     }
+    //     solve(0 , people , mp , {});
+    //     return temp;
+    // }
+    
+    
+    
+    
+vector<int>res;
+
+void helper(int i,vector<int>&people_skill,int m,int mask,vector<int>&ans,vector<vector<int>>&dp)
+{
+  if(i == people_skill.size()) //Base Case
+  {
+    if(mask == ((1<<m)-1)) //Check for all req_skills included
+    {
+      if(res.size() == 0 || (ans.size() < res.size())) res = ans; //better ans then update
+    }
+    return;
+  }
+
+  if(dp[i][mask] != -1) //Memoization Part
+  {
+    if(dp[i][mask] <= ans.size()) return;
+  }
+
+  helper(i+1,people_skill,m,mask,ans,dp); //Non-Pick / Ignore Case
+
+  ans.push_back(i); // Pick Case
+
+  helper(i+1,people_skill,m,(mask|people_skill[i]),ans,dp); //Next Call
+
+  ans.pop_back(); //Undo the change in Pick
+
+  if(ans.size() > 0) dp[i][mask] = ans.size(); //if found and answer then update DP
+}
+
+
+ vector<int> smallestSufficientTeam(vector<string>& req_skills, vector<vector<string>>& people) {
+
+        int n = people.size();
+        int m = req_skills.size();
+
+        unordered_map<string,int>mpp; //for hashing skill v/s bit
+
+        for(int i = 0;i<m;++i) mpp[req_skills[i]] = (1<<i); //setting ith bit, for req_skill[i] skill
+
+        vector<int>people_skill; //vector of mask for peoples
+
+        for(auto it : people) 
+        {
+          int mask = 0;
+          for(int j = 0; j < it.size(); ++j)
+          {
+            if(mpp.count(it[j])) mask |= mpp[it[j]]; //if it[j] is a required skill then set that bit for that people's mask
+          }
+          people_skill.push_back(mask); //store the mask 
         }
-        return dp[(1 << n) - 1];
+
+        vector<vector<int>> dp(n, vector<int>((1<<m),-1)); //n=number of people, and (1<<m) to express all value mask of size m can take
+        vector<int>ans;
+
+        helper(0,people_skill,m,0,ans,dp);
+        return res;
     }
 };
