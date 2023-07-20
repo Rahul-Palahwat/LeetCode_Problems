@@ -17,9 +17,6 @@ public:
                 pq.pop();
                 ans++;
             }
-            //if all elements are processed then stop 
-            if(pq.empty()&&i==n)
-                break;
         }
         return ans;
     }
