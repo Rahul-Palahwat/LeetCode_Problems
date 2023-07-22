@@ -1,8 +1,39 @@
-// dp solution  
 class Solution {
 public:
-	double knightProbability(int N, int K, int r, int c) {
-		vector<vector<int>> dir{{1,2},{1,-2},{-1,2},{-1,-2},{2,1},{2,-1},{-2,1},{-2,-1}};
+    vector<pair<int,int>> moves = {{2 , 1} , {-2 , -1} , {-2 , 1}, {2 , -1} , {1 , 2}, {-1 , -2}, {-1 , 2}, {1 , -2}};
+    double solve(int n , int k , int r , int c){
+        queue<pair<double , pair<int,int>>> q;
+        q.push({1.0 , {r , c}});
+        double temp = 1.0;
+        while(k--){
+            int sz = q.size();
+            cout<<sz<<" sz"<<endl;
+            while(sz--){
+                auto top = q.front();
+                int i = top.second.first , j = top.second.second;
+                q.pop();
+                for(auto it: moves){
+                    if((i+it.first) >= n || (i+it.first) < 0){
+                        continue;
+                    }
+                    if((j+it.second) >= n || (j+it.second) < 0){
+                        continue;
+                    }
+                    temp = top.first;
+                    temp = (temp)/(8*1.0);
+                    // cout<<temp<<" temp"<<endl;
+                    q.push({temp , {i+it.first , j+it.second}});
+                }
+            }
+        }
+        int sz = q.size();
+        // int val = q.front().first;
+        // cout<<sz<<" sz "<<temp<<endl;
+        return sz*1.0*temp;
+    }
+    double knightProbability(int N, int K, int r, int c) {
+        // return solve(n , k , r , c);
+        vector<vector<int>> dir{{1,2},{1,-2},{-1,2},{-1,-2},{2,1},{2,-1},{-2,1},{-2,-1}};
 		vector<vector<double>> dp(N,vector<double>(N,0));
 		dp[r][c]=1;
 		for(int i=1;i<=K;i++){
@@ -28,45 +59,5 @@ public:
 			}
 		double res=rec/pow(8,K);
 		return res;
-	}
+    }
 };
-
-
-
-
-
-// recursive solution
-// class Solution {
-// public:
-//     int ans = 0;
-//     void solve(int n, int k, int r, int c){
-        
-//         if(r>=n || c>=n || r<0 || c<0){
-//             return;
-//         }
-//         if(k<0){
-//             return;
-//         }
-//         if(k==0){
-//             ans++;
-//         }
-//         solve(n,k-1,r+2,c+1);
-//         solve(n,k-1,r+2,c-1);
-//         solve(n,k-1,r-2 , c+1);
-//         solve(n,k-1,r-2,c-1);
-//         solve(n,k-1,r-1,c+2);
-//         solve(n,k-1,r+1,c+2);
-//         solve(n,k-1,r-1,c-2);
-//         solve(n,k-1,r+1,c-2);
-//         return;
-//     }
-//     double knightProbability(int n, int k, int r, int c) {
-//         solve(n,k,r,c);
-//         double finalans=ans;
-//         cout<<ans<<endl;
-//         while(k--){
-//             finalans = (finalans*1.0)/(8*1.0);
-//         }
-//         return finalans;
-//     }
-// };
