@@ -46,25 +46,53 @@ public:
     
     
     // Optimized using same array
+    // unordered_map<int,int> mp;
+    // TreeNode* solve(vector<int>& in,int inStart ,int inEnd, vector<int>& p ,int pStart ,int pEnd){
+    //     if(inStart > inEnd){
+    //         return NULL;
+    //     }
+    //     if(pStart > pEnd){
+    //         return NULL;
+    //     }
+    //     TreeNode* node = new TreeNode(p[pEnd]);
+    //     int index = mp[p[pEnd]];
+    //     node->left = solve(in , inStart , index-1,p , pStart , pStart+index-inStart-1);
+    //     node->right = solve(in , index+1 , inEnd , p , pStart+index-inStart,pEnd-1);
+    //     return node;
+    // }
+    // TreeNode* buildTree(vector<int>& inorder, vector<int>& post) {
+    //     int n = inorder.size();
+    //     for(int i=0;i<n;i++){
+    //         mp[inorder[i]] = i;
+    //     }
+    //     return solve(inorder , 0 , n-1 ,post , 0 , n-1);
+    // }
+    
     unordered_map<int,int> mp;
-    TreeNode* solve(vector<int>& in,int inStart ,int inEnd, vector<int>& p ,int pStart ,int pEnd){
-        if(inStart > inEnd){
+    TreeNode* solve(int starti , int endi , int startp , int endp , vector<int>&inorder , vector<int>& post){
+        if(starti > endi){
             return NULL;
         }
-        if(pStart > pEnd){
+        if(startp > endp){
             return NULL;
         }
-        TreeNode* node = new TreeNode(p[pEnd]);
-        int index = mp[p[pEnd]];
-        node->left = solve(in , inStart , index-1,p , pStart , pStart+index-inStart-1);
-        node->right = solve(in , index+1 , inEnd , p , pStart+index-inStart,pEnd-1);
-        return node;
+        TreeNode* ans = new TreeNode(post[endp]);
+        int pos = mp[post[endp]];
+        ans->left = solve(starti , pos-1, startp, startp+pos-starti-1, inorder , post);
+        ans->right = solve(pos+1 , endi , startp+pos-starti , endp-1, inorder , post);
+        return ans;
     }
     TreeNode* buildTree(vector<int>& inorder, vector<int>& post) {
         int n = inorder.size();
         for(int i=0;i<n;i++){
             mp[inorder[i]] = i;
         }
-        return solve(inorder , 0 , n-1 ,post , 0 , n-1);
+        return solve(0 , n-1 , 0 , n-1 , inorder , post);
     }
+    
+    
+    
+    
+    
+    
 };
