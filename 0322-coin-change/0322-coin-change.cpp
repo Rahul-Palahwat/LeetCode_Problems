@@ -98,6 +98,37 @@ public:
     
     
     // Recursion + memoization
+    // int solve(int index , int amount, vector<int>& coins , vector<vector<int>> &dp){
+    //     if(index < 0){
+    //         if(amount == 0){
+    //             return 0;
+    //         }
+    //         return 1e5;
+    //     }
+    //     if(dp[index][amount] != -1){
+    //         return dp[index][amount];
+    //     }
+    //     int notTaken = solve(index-1 , amount , coins, dp);
+    //     int taken = INT_MAX;
+    //     if(coins[index] <= amount){
+    //         taken = min(taken , 1+solve(index , amount-coins[index] , coins , dp));
+    //     }
+    //     return dp[index][amount] = min(taken , notTaken);
+    // }
+    // int coinChange(vector<int>& coins, int amount) {
+    //     int n = coins.size();
+    //     vector<vector<int>> dp(n , vector<int>(amount+1 , -1));
+    //     int ans = solve(n-1 , amount , coins , dp);
+    //     if(ans >= 1e5){
+    //         return -1;
+    //     }
+    //     return ans;
+    // }
+    
+    
+    
+    
+    // tabulation
     int solve(int index , int amount, vector<int>& coins , vector<vector<int>> &dp){
         if(index < 0){
             if(amount == 0){
@@ -117,8 +148,21 @@ public:
     }
     int coinChange(vector<int>& coins, int amount) {
         int n = coins.size();
-        vector<vector<int>> dp(n , vector<int>(amount+1 , -1));
-        int ans = solve(n-1 , amount , coins , dp);
+        vector<vector<int>> dp(n+1 , vector<int>(amount+1 , 0));
+        for(int i=1;i<=amount;i++){
+            dp[0][i] = 1e5;
+        }
+        for(int index=1;index<=n;index++){
+            for(int wt=1;wt<=amount;wt++){
+                int notTaken = dp[index-1][wt];
+                int taken = INT_MAX;
+                if(coins[index-1] <= wt){
+                    taken = min(taken , 1+dp[index][wt-coins[index-1]]);
+                }
+                dp[index][wt] = min(taken , notTaken);
+            }
+        }
+        int ans = dp[n][amount];
         if(ans >= 1e5){
             return -1;
         }
