@@ -52,6 +52,32 @@ public:
     
     
     // Recursion + Memoization
+    // int solve(int i , int j , vector<int>& cuts , vector<vector<int>> &dp){
+    //     if(i>j){
+    //         return 0;
+    //     }
+    //     if(dp[i][j] != -1){
+    //         return dp[i][j];
+    //     }
+    //     int ans = INT_MAX;
+    //     for(int k = i;k<=j;k++){
+    //         int temp = cuts[j+1]-cuts[i-1] + solve(i , k-1 , cuts , dp) + solve(k+1 , j , cuts , dp);
+    //         ans = min(ans , temp);
+    //     }
+    //     return dp[i][j] = ans;
+    // }
+    // int minCost(int n, vector<int>& cuts) {
+    //     cuts.push_back(0);
+    //     cuts.push_back(n);
+    //     sort(cuts.begin() , cuts.end());
+    //     int sz = cuts.size();
+    //     vector<vector<int>> dp(sz , vector<int>(sz , -1));
+    //     return solve(1 , sz-2, cuts , dp);
+    // }
+    
+    
+    
+    // Tabulation
     int solve(int i , int j , vector<int>& cuts , vector<vector<int>> &dp){
         if(i>j){
             return 0;
@@ -71,7 +97,17 @@ public:
         cuts.push_back(n);
         sort(cuts.begin() , cuts.end());
         int sz = cuts.size();
-        vector<vector<int>> dp(sz , vector<int>(sz , -1));
-        return solve(1 , sz-2, cuts , dp);
+        vector<vector<int>> dp(sz , vector<int>(sz , 0));
+        for(int i=sz-2;i>=1;i--){
+            for(int j=i;j<=sz-2;j++){
+                int ans = INT_MAX;
+                for(int k = i;k<=j;k++){
+                    int temp = cuts[j+1]-cuts[i-1] + dp[i][k-1] + dp[k+1][j];
+                    ans = min(ans , temp);
+                }
+                dp[i][j] = ans;
+            }
+        }
+        return dp[1][sz-2];
     }
 };
