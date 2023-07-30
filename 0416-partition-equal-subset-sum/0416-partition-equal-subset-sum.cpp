@@ -131,20 +131,37 @@ public:
     
     
     // Recursion + Memoization
-    bool solve(int index , int sum , vector<int>& nums , vector<vector<int>> &dp){
-        if(index < 0){
-            return sum == 0;
-        }
-        if(dp[index][sum] != -1){
-            return dp[index][sum];
-        }
-        bool notTaken = solve(index-1 , sum , nums , dp);
-        bool taken = false;
-        if(sum >= nums[index]){
-            taken = solve(index-1 , sum-nums[index] , nums , dp);
-        } 
-        return dp[index][sum] = (taken || notTaken);
-    }
+    // bool solve(int index , int sum , vector<int>& nums , vector<vector<int>> &dp){
+    //     if(index < 0){
+    //         return sum == 0;
+    //     }
+    //     if(dp[index][sum] != -1){
+    //         return dp[index][sum];
+    //     }
+    //     bool notTaken = solve(index-1 , sum , nums , dp);
+    //     bool taken = false;
+    //     if(sum >= nums[index]){
+    //         taken = solve(index-1 , sum-nums[index] , nums , dp);
+    //     } 
+    //     return dp[index][sum] = (taken || notTaken);
+    // }
+    // bool canPartition(vector<int>& nums) {
+    //     int n = nums.size();
+    //     int sum = 0;
+    //     for(auto it: nums){
+    //         sum+=it;
+    //     }
+    //     if(sum%2 != 0){
+    //         return false;
+    //     }
+    //     sum/=2;
+    //     vector<vector<int>> dp(n , vector<int>(sum+1 , -1));
+    //     return solve(n-1 , sum , nums , dp);
+    // }
+    
+    
+    
+    // Tabulation
     bool canPartition(vector<int>& nums) {
         int n = nums.size();
         int sum = 0;
@@ -155,7 +172,21 @@ public:
             return false;
         }
         sum/=2;
-        vector<vector<int>> dp(n , vector<int>(sum+1 , -1));
-        return solve(n-1 , sum , nums , dp);
+        int tt = sum;
+        vector<vector<bool>> dp(n+1 , vector<bool>(sum+1 , false));
+        for(int i=0;i<=n;i++){
+            dp[i][0] = true;
+        }
+        for(int index=1;index<=n;index++){
+            for(int sum=1;sum<=tt;sum++){
+                bool notTaken = dp[index-1][sum];
+                bool taken = false;
+                if(sum >= nums[index-1]){
+                    taken = dp[index-1][sum-nums[index-1]];
+                } 
+                dp[index][sum] = (taken || notTaken);
+            }
+        }
+        return dp[n-1][sum];
     }
 };
