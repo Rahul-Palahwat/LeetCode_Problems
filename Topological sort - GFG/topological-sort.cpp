@@ -6,60 +6,34 @@ using namespace std;
 class Solution
 {
 	public:
-// 	using DFS
-	//Function to return list containing vertices in Topological order.
-// 	vector<int> ans;
-// 	void dfs(int node , vector<int> adj[], vector<bool>& vis){
-// 	    if(vis[node]){
-// 	        return;
-// 	    }
-// 	    vis[node] = true;
-// 	    for(auto it: adj[node]){
-// 	        dfs(it , adj,vis);
-// 	    }
-// 	    ans.push_back(node);
-// 	}
-// 	vector<int> topoSort(int V, vector<int> adj[]) 
-// 	{
-// 	    // code here
-// 	    vector<bool> vis(V,false);
-// 	    for(int i=0;i<V;i++){
-// 	        if(!vis[i]){
-// 	            dfs(i , adj,vis);
-// 	        }
-// 	    }
-// 	    reverse(ans.begin() , ans.end());
-// 	    return ans;
-// 	}
-	
-	
-	
-// 	Now using BFS
-    vector<int> topoSort(int V, vector<int> adj[]) 
+	//Function to return list containing vertices in Topological order. 
+	void dfs(int node , vector<int> adj[] , vector<bool> &vis , stack<int>&st){
+	    if(vis[node]){
+	        return;
+	    }
+	    vis[node] = true;
+	    for(auto it: adj[node]){
+	        if(!vis[it]){
+	            dfs(it , adj , vis , st);
+	        }
+	    }
+	    st.push(node);
+	    return;
+	}
+	vector<int> topoSort(int V, vector<int> adj[]) 
 	{
+	    // code here
 	    vector<int> ans;
-	    vector<int> indeg(V,0);
+	    stack<int> st;
+	    vector<bool> vis(V , false);
 	    for(int i=0;i<V;i++){
-	        for(auto it: adj[i]){
-	            indeg[it]++;
+	        if(!vis[i]){
+	            dfs(i , adj , vis , st);
 	        }
 	    }
-	    queue<int> q;
-	    for(int i=0;i<V;i++){
-	        if(indeg[i] == 0){
-	            q.push(i);
-	        }
-	    }
-	    while(!q.empty()){
-	        int top = q.front();
-	        q.pop();
-	        for(auto it: adj[top]){
-	            indeg[it]--;
-	            if(indeg[it] == 0){
-	                q.push(it);
-	            }
-	        }
-	        ans.push_back(top);
+	    while(!st.empty()){
+	        ans.push_back(st.top());
+	        st.pop();
 	    }
 	    return ans;
 	}
