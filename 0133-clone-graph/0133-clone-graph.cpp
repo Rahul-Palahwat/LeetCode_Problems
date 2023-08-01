@@ -21,28 +21,63 @@ public:
 
 class Solution {
 public:
-    Node* dfs(Node* node , map<Node* , Node*>& mp){
-        vector<Node*> neighbour;
-        Node* clone = new Node(node->val);
-        mp[node] = clone;
-        for(auto it: node->neighbors){
-            if(mp.find(it) != mp.end()){
-                neighbour.push_back(mp[it]);
-            }else{
-                neighbour.push_back(dfs(it , mp));
+    
+    
+    Node* cloneGraph(Node* node) {
+        if(!node){
+            return NULL;
+        }
+        Node *copy = new Node(node->val , {});
+        map<Node* , Node*> copies;
+        copies[node] = copy;
+        queue<Node*> q;
+        q.push(node);
+        while(!q.empty()){
+            auto top = q.front();
+            q.pop();
+            for(Node* it: top->neighbors){
+                if(copies.find(it) == copies.end()){
+                    copies[it] = new Node(it->val , {});
+                    q.push(it);
+                }
+                copies[top]->neighbors.push_back(copies[it]);
             }
         }
-        clone->neighbors = neighbour;
-        return clone;
+        return copy;
     }
-    Node* cloneGraph(Node* node) {
-        map<Node* , Node*> mp;
-        if(node == NULL)
-            return NULL;
-        if(node->neighbors.size() == 0){
-            Node* clone = new Node(node->val);
-            return clone;
-        }
-        return dfs(node , mp);
-    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // Node* dfs(Node* node , map<Node* , Node*>& mp){
+    //     vector<Node*> neighbour;
+    //     Node* clone = new Node(node->val);
+    //     mp[node] = clone;
+    //     for(auto it: node->neighbors){
+    //         if(mp.find(it) != mp.end()){
+    //             neighbour.push_back(mp[it]);
+    //         }else{
+    //             neighbour.push_back(dfs(it , mp));
+    //         }
+    //     }
+    //     clone->neighbors = neighbour;
+    //     return clone;
+    // }
+    // Node* cloneGraph(Node* node) {
+    //     map<Node* , Node*> mp;
+    //     if(node == NULL)
+    //         return NULL;
+    //     if(node->neighbors.size() == 0){
+    //         Node* clone = new Node(node->val);
+    //         return clone;
+    //     }
+    //     return dfs(node , mp);
+    // }
 };
