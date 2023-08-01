@@ -6,46 +6,22 @@ using namespace std;
 class Solution {
   public:
     // Function to return a list containing the DFS traversal of the graph.
-    // vector<int> ans;
-    // void dfs(int i , vector<int> adj[] , vector<bool>& vis){
-    //     if(vis[i]){
-    //         return;
-    //     }
-    //     vis[i] = true;
-    //     ans.push_back(i);
-    //     for(auto it: adj[i]){
-    //         dfs(it , adj , vis);
-    //     }
-    //     return;
-    // }
+    void solve(int v , vector<int> adj[] , vector<int>& ans , vector<bool> &vis){
+        if(vis[v]){
+            return;
+        }
+        ans.push_back(v);
+        vis[v] = true;
+        for(auto it: adj[v]){
+            solve(it , adj , ans , vis);
+        }
+        return;
+    }
     vector<int> dfsOfGraph(int V, vector<int> adj[]) {
         // Code here
         vector<int> ans;
-        stack<int> q;
-        vector<bool> vis(V,false);
-        // dfs(0 , adj , vis);
-        q.push(0);
-        while(!q.empty()){
-            // int t = q.size();
-            // while(t--){
-            int top = q.top();
-            q.pop();
-            if(vis[top]){
-                continue;
-            }
-            vis[top] = true;
-            ans.push_back(top);
-            vector<int> temp;
-            for(auto it: adj[top]){
-                // q.push(it);
-                temp.push_back(it);
-            }
-            reverse(temp.begin() , temp.end());
-            for(auto it: temp){
-                q.push(it);
-            }
-            // }
-        }
+        vector<bool> vis(V , false);
+        solve(0 , adj , ans , vis);
         return ans;
     }
 };
