@@ -7,33 +7,70 @@ class Solution
 {
 	public:
 	//Function to return list containing vertices in Topological order. 
-	void dfs(int node , vector<int> adj[] , vector<bool> &vis , stack<int>&st){
-	    if(vis[node]){
-	        return;
-	    }
-	    vis[node] = true;
-	    for(auto it: adj[node]){
-	        if(!vis[it]){
-	            dfs(it , adj , vis , st);
-	        }
-	    }
-	    st.push(node);
-	    return;
-	}
+	
+	
+// 	Toposort using dfs
+// 	void dfs(int node , vector<int> adj[] , vector<bool> &vis , stack<int>&st){
+// 	    if(vis[node]){
+// 	        return;
+// 	    }
+// 	    vis[node] = true;
+// 	    for(auto it: adj[node]){
+// 	        if(!vis[it]){
+// 	            dfs(it , adj , vis , st);
+// 	        }
+// 	    }
+// 	    st.push(node);
+// 	    return;
+// 	}
+// 	vector<int> topoSort(int V, vector<int> adj[]) 
+// 	{
+// 	    // code here
+// 	    vector<int> ans;
+// 	    stack<int> st;
+// 	    vector<bool> vis(V , false);
+// 	    for(int i=0;i<V;i++){
+// 	        if(!vis[i]){
+// 	            dfs(i , adj , vis , st);
+// 	        }
+// 	    }
+// 	    while(!st.empty()){
+// 	        ans.push_back(st.top());
+// 	        st.pop();
+// 	    }
+// 	    return ans;
+// 	}
+
+
+
+
+// Now using bfs Khan's algo
 	vector<int> topoSort(int V, vector<int> adj[]) 
 	{
 	    // code here
 	    vector<int> ans;
-	    stack<int> st;
-	    vector<bool> vis(V , false);
+	    vector<int> indegree(V , 0);
 	    for(int i=0;i<V;i++){
-	        if(!vis[i]){
-	            dfs(i , adj , vis , st);
+	        for(auto it: adj[i]){
+	            indegree[it]++;
 	        }
 	    }
-	    while(!st.empty()){
-	        ans.push_back(st.top());
-	        st.pop();
+	    queue<int> q;
+	    for(int i=0;i<V;i++){
+	        if(indegree[i] == 0){
+	            q.push(i);
+	        }
+	    }
+	    while(!q.empty()){
+	        auto top = q.front();
+	        q.pop();
+	        ans.push_back(top);
+	        for(auto it: adj[top]){
+	            indegree[it]--;
+	            if(indegree[it] == 0){
+	                q.push(it);
+	            }
+	        }
 	    }
 	    return ans;
 	}
