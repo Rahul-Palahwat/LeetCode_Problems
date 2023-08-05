@@ -89,24 +89,86 @@ public:
     
     
     // Another try using dfs
-    bool dfs(int node, int color , vector<vector<int>>& graph , vector<bool>&vis , vector<int>&col){
-        vis[node] = true;
-        col[node] = color;
-        bool ans = true;
-        for(auto it: graph[node]){
-            if(vis[it]){
-                if(col[it] == color){
-                    return false;
-                }
+    // bool dfs(int node, int color , vector<vector<int>>& graph , vector<bool>&vis , vector<int>&col){
+    //     vis[node] = true;
+    //     col[node] = color;
+    //     bool ans = true;
+    //     for(auto it: graph[node]){
+    //         if(vis[it]){
+    //             if(col[it] == color){
+    //                 return false;
+    //             }
+    //             continue;
+    //         }
+    //         if(color == 1){
+    //             ans = (ans && dfs(it , 0 , graph , vis , col));
+    //         }else{
+    //             ans = (ans && dfs(it , 1 , graph , vis , col));
+    //         }
+    //     }
+    //     return ans;
+    // }
+    // bool isBipartite(vector<vector<int>>& graph) {
+    //     int n = graph.size();
+    //     vector<bool> vis(n , false);
+    //     vector<int> col(n , -1);
+    //     for(int i=0;i<n;i++){
+    //         if(!vis[i]){
+    //             if(!dfs(i , 0 , graph , vis , col)){
+    //                 return false;
+    //             }
+    //         }
+    //     }
+    //     return true;
+    // }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // ONE MORE TRY
+    bool isPossible(int node , vector<vector<int>>& g, vector<int>& col , vector<bool>&vis){
+        queue<pair<int,int>> q;
+        q.push({node , 0});
+        while(!q.empty()){
+            auto top = q.front();
+            q.pop();
+            int ver = top.first;
+            int color = top.second;
+            if(vis[ver]){
                 continue;
             }
-            if(color == 1){
-                ans = (ans && dfs(it , 0 , graph , vis , col));
-            }else{
-                ans = (ans && dfs(it , 1 , graph , vis , col));
+            col[ver] = color;
+            vis[ver] = true;
+            for(auto it: g[ver]){
+                if(color == 1){
+                    if(col[it] == 1){
+                        return false;
+                    }
+                    q.push({it, 0});
+                }else{
+                    if(col[it] == 0){
+                        return false;
+                    }
+                    q.push({it, 1});
+                }
             }
         }
-        return ans;
+        return true;
     }
     bool isBipartite(vector<vector<int>>& graph) {
         int n = graph.size();
@@ -114,11 +176,14 @@ public:
         vector<int> col(n , -1);
         for(int i=0;i<n;i++){
             if(!vis[i]){
-                if(!dfs(i , 0 , graph , vis , col)){
+                if(!isPossible(i , graph , col , vis)){
                     return false;
                 }
             }
         }
         return true;
     }
+    
+    
+    
 };
