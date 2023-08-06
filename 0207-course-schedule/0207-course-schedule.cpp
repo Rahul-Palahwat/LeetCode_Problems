@@ -36,37 +36,39 @@ public:
     
     
     
-    // By DFS using topological sort
-    // void dfs(int node , stack<int>& st , vector<bool>& vis , vector<int> adj[]){
-    //     if(vis[node]){
-    //         return;
-    //     }
-    //     vis[node] = true;
-    //     for(auto it: adj[node]){
-    //         dfs(it , st , vis , adj);
-    //     }
-    //     st.push(node);
-    //     return;
-    // }
+    
+    
+    
+    // Me trying another time 
     // bool canFinish(int numCourses, vector<vector<int>>& pre) {
-    //     stack<int> st;
+    //     vector<int> ans;
     //     vector<int> adj[numCourses];
     //     for(auto it: pre){
     //         adj[it[1]].push_back(it[0]);
     //     }
-    //     vector<bool> vis(numCourses , false);
+    //     queue<int> q;
+    //     vector<int> indegree(numCourses , 0);
     //     for(int i=0;i<numCourses;i++){
-    //         if(!vis[i]){
-    //             dfs(i , st , vis , adj);
+    //         for(auto it: adj[i]){
+    //             indegree[it]++;
     //         }
     //     }
-    //     vector<int> ans;
-    //     while(!st.empty()){
-    //         ans.push_back(st.top());
-    //         cout<<st.top()<<" ";
-    //         st.pop();
+    //     for(int i=0;i<numCourses;i++){
+    //         if(indegree[i] == 0){
+    //             q.push(i);
+    //         }
     //     }
-    //     cout<<endl;
+    //     while(!q.empty()){
+    //         auto top = q.front();
+    //         q.pop();
+    //         ans.push_back(top);
+    //         for(auto it: adj[top]){
+    //             indegree[it]--;
+    //             if(indegree[it] == 0){
+    //                 q.push(it);
+    //             }
+    //         }
+    //     }
     //     return ans.size() == numCourses;
     //  }
     
@@ -75,37 +77,36 @@ public:
     
     
     
-    // Me trying another time 
     
+    // 06/08/2023 by toposort by kanh's algorithm
     bool canFinish(int numCourses, vector<vector<int>>& pre) {
-        vector<int> ans;
-        vector<int> adj[numCourses];
+        vector<int> g[numCourses];
         for(auto it: pre){
-            adj[it[1]].push_back(it[0]);
+            g[it[1]].push_back(it[0]);
         }
-        queue<int> q;
         vector<int> indegree(numCourses , 0);
         for(int i=0;i<numCourses;i++){
-            for(auto it: adj[i]){
+            for(auto it: g[i]){
                 indegree[it]++;
             }
         }
+        queue<int> q;
         for(int i=0;i<numCourses;i++){
-            if(indegree[i] == 0){
+            if(indegree[i] == 0)
                 q.push(i);
-            }
         }
+        int ans = 0;
         while(!q.empty()){
             auto top = q.front();
             q.pop();
-            ans.push_back(top);
-            for(auto it: adj[top]){
+            ans++;
+            for(auto it: g[top]){
                 indegree[it]--;
                 if(indegree[it] == 0){
                     q.push(it);
                 }
             }
         }
-        return ans.size() == numCourses;
+        return ans == numCourses;
      }
 };
