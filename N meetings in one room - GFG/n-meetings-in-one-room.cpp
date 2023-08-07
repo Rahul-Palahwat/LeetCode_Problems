@@ -5,19 +5,21 @@ using namespace std;
 // } Driver Code Ends
 class Solution
 {
-    
     public:
+    //Function to find the maximum number of meetings that can
+    //be performed in a meeting room.
     struct Meeting{
         int start;
         int end;
         int position;
     };
-    static bool comparator(struct Meeting m1, Meeting m2){
+    static bool cmp(struct Meeting m1 , struct Meeting m2){
         if(m1.end < m2.end){
             return true;
-        }else if(m1.end>m2.end){
+        }
+        else if(m1.end > m2.end){
             return false;
-        }else if(m1.position<m2.position){
+        }else if(m1.position < m2.position){
             return true;
         }else{
             return false;
@@ -25,23 +27,23 @@ class Solution
     }
     int maxMeetings(int start[], int end[], int n)
     {
+        // Your code here
         struct Meeting meet[n];
         for(int i=0;i<n;i++){
             meet[i].start = start[i];
             meet[i].end = end[i];
-            meet[i].position = i+1;
+            meet[i].position = i;
         }
-        sort(meet,meet+n,comparator);
-        int st = meet[0].end;
-        vector<int> ans;
-        ans.push_back(meet[0].position);
-        for(auto it: meet){
-            if(it.start > st){
-                ans.push_back(it.position);
-                st = it.end;
+        sort(meet , meet+n , cmp);
+        int ans = 1;
+        int last = meet[0].end;
+        for(int i=1;i<n;i++){
+            if(meet[i].start > last){
+                ans++;
+                last = meet[i].end;
             }
         }
-        return ans.size();
+        return ans;
     }
 };
 
