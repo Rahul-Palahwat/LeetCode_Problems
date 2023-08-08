@@ -12,37 +12,21 @@ public:
         }
         while(l<=h){
             int mid = (l+h)/2;
-            if(nums[mid] > nums[l]){
-                if( k == nums[mid]){
-                    return mid;
-                }else if(k == nums[l]){
-                    return l;
-                }else if(k== nums[h]){
-                    return h;
+            if(nums[mid] == k){
+                return mid;
+            }
+            //check if left is sorted
+            if(nums[mid] >= nums[l]){
+                if(nums[mid] >= k && nums[l] <=k){
+                    h = mid-1;
+                }else{
+                    l = mid+1;
                 }
-                else if(k<nums[mid] && k>nums[l]){
+            }else {
+                if(k >= nums[mid] && k<=nums[h]){
+                    l = mid+1;
+                }else{
                     h=mid-1;
-                }
-                else{
-                    l=mid+1;
-                }
-            }else{
-                if( k == nums[mid]){
-                    return mid;
-                }else if(k == nums[l]){
-                    return l;
-                }else if(k== nums[h]){
-                    return h;
-                }
-                else if(k<nums[mid]){
-                    h=mid-1;
-                }else if(k>nums[l]){
-                    h=mid-1;
-                }else if(k>nums[mid] && k<nums[l]){
-                    l=mid+1;
-                }
-                else{
-                    return mid;
                 }
             }
         }
