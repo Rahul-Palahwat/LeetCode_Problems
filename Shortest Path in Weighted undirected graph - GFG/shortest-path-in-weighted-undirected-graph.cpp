@@ -41,18 +41,15 @@ class Solution {
             }
         }
         int par = n;
-        while(1){
-            if(parent[par] == 1 && par == 1){
-                ans.push_back(par);
-                reverse(ans.begin() , ans.end());
-                return ans;
-            }
-            if(parent[par] == par){
-                return {-1};
-            }
+        while(parent[par] != par){
             ans.push_back(par);
             par = parent[par];
         }
+        if(par != 1){
+            return {-1};
+        }
+        ans.push_back(1);
+        reverse(ans.begin() , ans.end());
         return ans;
     }
 };
