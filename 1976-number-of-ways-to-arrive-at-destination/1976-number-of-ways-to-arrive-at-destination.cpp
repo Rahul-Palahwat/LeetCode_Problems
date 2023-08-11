@@ -1,94 +1,60 @@
-// class Solution {
-// public:
-//     int mod = 1e9+7;
-//     int dijsktra(vector<pair<int,int>> g[],int source,int n){
-//         vector<bool> vis(n,0);
-//         vector<long long> dis(n,1e10);
-//         vector<long long> ways(n,0);
-//         set<pair<int,int>> st;
-//         st.insert({0,source});
-//         dis[source] = 0;
-//         ways[source] = 1;
-//         while(st.size() > 0){
-//             auto t = *st.begin();
-//             int s = t.second;
-//             int dist = t.first;
-//             st.erase(st.begin());
-//             if(vis[s]){
-//                 continue;
-//             }
-//             vis[s] = true;
-//             for(auto child: g[s]){
-//                 int child_node = child.first;
-//                 int child_w = child.second;
-//                 long long dd =dist;
-//                 dd+=child_w;
-//                 if(dd == dis[child_node]){
-//                     ways[child_node] = (ways[s] + ways[child_node])%mod;
-//                     // if(ways[child_node] >= mod){
-//                     //     cout<<"hello"<<ways[child_node];
-//                     // }
-//                     // ways[child_node] = ways[child_node]%mod;
-//                 }
-//                 if(dd < dis[child_node]){
-//                     ways[child_node] = ways[s];
-//                     dis[child_node]=dd;
-//                     st.insert({dis[child_node] , child_node});
-//                 }
-//             }
-//         }
-//         return ways[n-1];
-//     }
-//     int countPaths(int n, vector<vector<int>>& roads) {
-        
-//         vector<pair<int,int>> g[n];
-//         for(auto it: roads){
-//             g[it[0]].push_back({it[1],it[2]});
-//             g[it[1]].push_back({it[0],it[2]});
-            
-//         }
-//         return dijsktra(g,0,n);
-//     }
-// };
-
-// only last 2 cases were reamingin 
-
-
-
-#define ll long long
-#define pll pair<ll, ll>
 class Solution {
 public:
-    int MOD = 1e9 + 7;
     int countPaths(int n, vector<vector<int>>& roads) {
-        vector<vector<pll>> graph(n);
-        for(auto& road: roads) {
-            ll u = road[0], v = road[1], time = road[2];
-            graph[u].push_back({v, time});
-            graph[v].push_back({u, time});
+        vector<pair<long long, long long>> adj[n];
+        for (auto it : roads)
+        {
+            adj[it[0]].push_back({it[1], it[2]});
+            adj[it[1]].push_back({it[0], it[2]});
         }
-        return dijkstra(graph, n, 0);
-    }
-    int dijkstra(const vector<vector<pll>>& graph, int n, int src) {
-        vector<ll> dist(n, LONG_MAX);
-        vector<ll> ways(n);
-        ways[src] = 1;
-        dist[src] = 0;
-        priority_queue<pll, vector<pll>, greater<>> minHeap;
-        minHeap.push({0, 0}); // dist, src
-        while (!minHeap.empty()) {
-            auto[d, u] = minHeap.top(); minHeap.pop();
-            if (d > dist[u]) continue; // Skip if `d` is not updated to latest version!
-            for(auto [v, time] : graph[u]) {
-                if (dist[v] > d + time) {
-                    dist[v] = d + time;
-                    ways[v] = ways[u];
-                    minHeap.push({dist[v], v});
-                } else if (dist[v] == d + time) {
-                    ways[v] = (ways[v] + ways[u]) % MOD;
+
+        // Defining a priority queue (min heap). 
+        priority_queue<pair<long long, long long>,
+                       vector<pair<long long, long long>>, greater<pair<long long, long long>>> pq;
+
+        // Initializing the dist array and the ways array
+        // along with their first indices.
+        vector<long long> dist(n, 1e18), ways(n, 0);
+        dist[0] = 0;
+        ways[0] = 1;
+        pq.push({0, 0});
+
+        // Define modulo value
+        int mod = (int)(1e9 + 7);
+
+        // Iterate through the graph with the help of priority queue
+        // just as we do in Dijkstra's Algorithm.
+        while (!pq.empty())
+        {
+            long long dis = pq.top().first;
+            long long node = pq.top().second;
+            pq.pop();
+
+            for (auto it : adj[node])
+            {
+                long long adjNode = it.first;
+                long long edW = it.second;
+
+                // This ‘if’ condition signifies that this is the first
+                // time we’re coming with this short distance, so we push
+                // in PQ and keep the no. of ways the same.
+                if (dis + edW < dist[adjNode])
+                {
+                    dist[adjNode] = dis + edW;
+                    pq.push({dis + edW, adjNode});
+                    ways[adjNode] = ways[node]%mod;
+                }
+
+                // If we again encounter a node with the same short distance
+                // as before, we simply increment the no. of ways.
+                else if (dis + edW == dist[adjNode])
+                {
+                    ways[adjNode] = (ways[adjNode] + ways[node]) % mod;
                 }
             }
         }
-        return ways[n-1];
+        // Finally, we return the no. of ways to reach
+        // (n-1)th node modulo 10^9+7.
+        return ways[n - 1] % mod;
     }
 };
