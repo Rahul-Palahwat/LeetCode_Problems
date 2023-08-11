@@ -46,19 +46,45 @@ public:
     
     
     // Tabulation + Optimization
+    // int change(int amount, vector<int>& coins) {
+    //     int n = coins.size();
+    //     vector<int> dp(amount+1 , 0);
+    //     dp[0] = 1;
+    //     for(int i=1;i<n+1;i++){
+    //         vector<int> temp(amount+1 , 0);
+    //         temp[0] = 1;
+    //         for(int j=1;j<amount+1;j++){
+    //             int notTake = dp[j] , take = 0;
+    //             if(coins[i-1]<=j){
+    //                 take = temp[j-coins[i-1]];
+    //             }
+    //             temp[j] = take+notTake;
+    //         }
+    //         dp = temp;
+    //     }
+    //     return dp[amount];
+    // }
+    
+    
+    
+    
+    
+    
+    // 11/08/2023
     int change(int amount, vector<int>& coins) {
         int n = coins.size();
         vector<int> dp(amount+1 , 0);
         dp[0] = 1;
-        for(int i=1;i<n+1;i++){
+        for(int i=1;i<=n;i++){
             vector<int> temp(amount+1 , 0);
             temp[0] = 1;
-            for(int j=1;j<amount+1;j++){
-                int notTake = dp[j] , take = 0;
-                if(coins[i-1]<=j){
+            for(int j = 1;j<=amount;j++){
+                int notTake = dp[j];
+                int take = 0;
+                if(j>=coins[i-1]){
                     take = temp[j-coins[i-1]];
                 }
-                temp[j] = take+notTake;
+                temp[j] = notTake+take;
             }
             dp = temp;
         }
