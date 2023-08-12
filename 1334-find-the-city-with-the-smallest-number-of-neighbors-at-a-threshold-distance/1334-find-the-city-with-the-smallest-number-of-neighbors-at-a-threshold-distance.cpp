@@ -1,51 +1,44 @@
 class Solution {
 public:
-    int ans = 0;
-    int count = INT_MAX;
-    
-    int dij(vector<pair<int,int>> g[],int source,int n,int maxi){
-        vector<int> dis(n,INT_MAX);
-        vector<bool> vis(n,0);
-        set<pair<int,int>> st;
-        st.insert({0,source});
-        dis[source] = 0;
-        while(st.size() > 0){
-            auto node = *st.begin();
-            int v = node.second;
-            int v_dis = node.first;
-            st.erase(st.begin());
-            if(vis[v]){
-                continue;
-            }
-            vis[v]=1;
-            for(auto child: g[v]){
-                int child_v = child.first;
-                int child_dis = child.second;
-                if((dis[v]+child_dis) < dis[child_v]){
-                    dis[child_v] = dis[v]+child_dis;
-                    st.insert({dis[child_v] , child_v});
+    int dij(int src , vector<pair<int,int>> g[] , int threshold , int n){
+        vector<int> dis(n , 1e9);
+        priority_queue<pair<int,int> , vector<pair<int , int>> , greater<pair<int,int>>> minh;
+        minh.push({0 , src});
+        dis[src] = 0;
+        while(!minh.empty()){
+            auto top = minh.top();
+            minh.pop();
+            int node = top.second;
+            for(auto it: g[node]){
+                int nextNode = it.first;
+                int nextDis = it.second;
+                if(nextDis + dis[node] < dis[nextNode]){
+                    dis[nextNode] = nextDis+dis[node];
+                    minh.push({dis[nextNode] , nextNode});
                 }
             }
         }
-        int temp = 0;
+        int cnt = 0;
         for(auto it: dis){
-            if(it <= maxi){
-                temp++;
+            if(it<=threshold){
+                cnt++;
             }
         }
-        return temp;
+        return cnt;
     }
-    int findTheCity(int n, vector<vector<int>>& edges, int distance) {
+    int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
         vector<pair<int,int>> g[n];
         for(auto it: edges){
-            g[it[0]].push_back({it[1],it[2]});
-            g[it[1]].push_back({it[0],it[2]});
+            g[it[0]].push_back({it[1] , it[2]});
+            g[it[1]].push_back({it[0] , it[2]});
         }
+        int ans=-1;
+        int mini = INT_MAX;
         for(int i=0;i<n;i++){
-            int t = dij(g,i , n , distance);
-            if(t<=count){
+            int cnt = dij(i , g , distanceThreshold , n);
+            if(cnt <= mini){
+                mini = cnt;
                 ans = i;
-                count = t;
             }
         }
         return ans;
