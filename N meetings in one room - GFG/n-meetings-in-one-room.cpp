@@ -11,12 +11,9 @@ class Solution
     struct Meeting{
         int start;
         int end;
-        int pos;
     };
     static bool cmp(struct Meeting m1 , struct Meeting m2){
-        if(m1.end == m2.end){
-            return m1.pos > m2.pos;
-        }else if(m1.end > m2.end){
+        if(m1.end >= m2.end){
             return false;
         }
         return true;
@@ -29,7 +26,6 @@ class Solution
         for(int i=0;i<n;i++){
             Meet[i].start = s[i];
             Meet[i].end = e[i];
-            Meet[i].pos = i+1;
         }
         sort(Meet , Meet+n , cmp);
         int endT = Meet[0].end;
