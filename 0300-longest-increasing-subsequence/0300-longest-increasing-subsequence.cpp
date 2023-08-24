@@ -87,24 +87,6 @@
 
 
 
-// Tabulation + Recursion
-// class Solution {
-// public:
-//     int lengthOfLIS(vector<int>& nums) {
-//         vector<int> dp;
-//         dp.push_back(nums[0]);
-//         for(int i=1;i<nums.size();i++){
-//             if(nums[i] > dp.back()){
-//                 dp.push_back(nums[i]);
-//             }else{
-//                 int index = lower_bound(dp.begin() , dp.end() , nums[i]) - dp.begin();
-//                 dp[index] = nums[i];
-//             }
-//         }
-//         return dp.size();
-//     }
-// };
-
 
 
 
@@ -112,25 +94,22 @@
 
 class Solution {
 public:
-    int solve(int index , vector<int>& nums, int prev , vector<vector<int>> &dp){
-        if(index > nums.size()){
-            return 0;
-        }
-        if(dp[index][prev] != -1){
-            return dp[index][prev];
-        }
-        int notTaken = solve(index+1 , nums , prev , dp);
-        int taken = 0;
-        if(prev == 0){
-            taken = 1+solve(index+1 , nums , index , dp);
-        }else if(nums[index-1] > nums[prev-1]){
-            taken = 1+solve(index+1 , nums , index , dp);
-        }
-        return dp[index][prev] = max(taken , notTaken);
-    }
     int lengthOfLIS(vector<int>& nums) {
+        vector<int> temp;
         int n = nums.size();
-        vector<vector<int>> dp(n+1 , vector<int>(n+1 , -1));
-        return solve(1 , nums , 0 , dp);
+        for(int i=0;i<n;i++){
+            int index = lower_bound(temp.begin() , temp.end() , nums[i])-temp.begin();
+            if(index == temp.size()){
+                temp.push_back(nums[i]);
+            }else{
+                temp[index] = nums[i];
+            }
+            // cout<<index<<" "<<endl;
+        }
+        // for(auto it: temp){
+        //     cout<<it<<" ";
+        // }
+        // cout<<endl;
+        return temp.size();
     }
 };
