@@ -1,30 +1,35 @@
 class Solution {
 public:
-    string reorganizeString(string S) {
-        vector<int> cnt(26);
-	int mostFreq = 0, i = 0;
-
-	for(char c : S)
-		if(++cnt[c - 'a'] > cnt[mostFreq])
-			mostFreq = (c - 'a');
-
-	if(2 * cnt[mostFreq] - 1 > S.size()) return "";
-
-	while(cnt[mostFreq]) {
-		S[i] = ('a' + mostFreq);
-		i += 2;
-		cnt[mostFreq]--;
-	}
-
-	for(int j = 0; j < 26; j++) {
-		while(cnt[j]) {
-			if(i >= S.size()) i = 1;
-			S[i] = ('a' + j);
-			cnt[j]--;
-			i += 2;
-		}
-	}
-
-	return S;
+    string reorganizeString(string s) {
+        string ans = "";
+        unordered_map<char , int> mp;
+        for(auto it: s){
+            mp[it]++;
+        }
+        priority_queue<pair<int, char>> pq;
+        for(auto it: mp){
+            pq.push({it.second , it.first});
+        }
+        int sz = pq.top().first;
+        if(sz*2 -1 > s.size()){
+            return "";
+        }
+        while(!pq.empty()){
+            auto top = pq.top();
+            pq.pop();
+            ans+=top.second;
+            if(pq.size() > 0){
+                auto sec = pq.top();
+                pq.pop();
+                ans+=sec.second;
+                if(sec.first > 1){
+                    pq.push({sec.first-1 , sec.second});
+                }
+            }
+            if(top.first > 1){
+                pq.push({top.first-1 , top.second});
+            }
+        }
+        return ans;
     }
 };
