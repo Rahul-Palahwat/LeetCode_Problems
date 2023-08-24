@@ -1,31 +1,19 @@
 class Solution {
 public:
     int findUnsortedSubarray(vector<int>& nums) {
-        int maxi=INT_MIN,mini = INT_MAX;
-        priority_queue<int> maxh;
-        priority_queue<int,vector<int>,greater<int>> minh;
-        for(auto it: nums){
-            maxh.push(it);
-            minh.push(it);
+        vector<int> temp = nums;
+        int n = nums.size();
+        sort(temp.begin() , temp.end());
+        int start = 0 , end = n-1;
+        while(start < n && nums[start] == temp[start]){
+            start++;
         }
-        int i=0,j=nums.size()-1;
-        while(nums[i] == minh.top()){
-            i++;
-            minh.pop();
-            if(i >= nums.size() || minh.size() <=0){
-                break;
-            }
-        }
-        if(minh.size() == 0){
+        if(start == n){
             return 0;
         }
-        while(nums[j] == maxh.top() && j>=0){
-            j--;
-            maxh.pop();
-            if(j < 0 || maxh.size() <=0){
-                break;
-            }
+        while(end > 0 && nums[end] == temp[end]){
+            end--;
         }
-        return j-i+1;
+        return end-start+1;
     }
 };
