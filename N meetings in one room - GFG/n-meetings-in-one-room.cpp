@@ -8,31 +8,26 @@ class Solution
     public:
     //Function to find the maximum number of meetings that can
     //be performed in a meeting room.
-    struct Meeting{
-        int start;
-        int end;
-    };
-    static bool cmp(struct Meeting m1 , struct Meeting m2){
-        if(m1.end >= m2.end){
+    static bool cmp(pair<int,int> m1 , pair<int,int> m2){
+        if(m1.second >= m2.second){
             return false;
         }
         return true;
     }
-    int maxMeetings(int s[], int e[], int n)
+    int maxMeetings(int start[], int end[], int n)
     {
         // Your code here
-        struct Meeting Meet[n];
+        vector<pair<int,int>> v;
         int ans = 1;
         for(int i=0;i<n;i++){
-            Meet[i].start = s[i];
-            Meet[i].end = e[i];
+            v.push_back({start[i] , end[i]});
         }
-        sort(Meet , Meet+n , cmp);
-        int endT = Meet[0].end;
+        sort(v.begin() , v.end() , cmp);
+        int endT = v[0].second;
         for(int i=1;i<n;i++){
-            if(Meet[i].start > endT){
+            if(v[i].first > endT){
                 ans++;
-                endT = Meet[i].end;
+                endT = v[i].second;
             }
         }
         return ans;
