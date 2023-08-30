@@ -1,57 +1,51 @@
 class Solution {
 public:
-    bool check(vector<vector<char>> &board, int row, int col, char c){
-        board[row][col] = '.';
-        for(int i=0;i<9;i++){
-            if(board[i][col] == c){
-                return false;
-            }
-            if(board[row][i] == c){
+    
+    bool isValid(char ch , int i , int j , vector<vector<char>> &board){
+        for(int index=0;index<9;index++){
+            if(board[i][index] == ch){
                 return false;
             }
         }
-        col = col - (col%3);
-        row = row - (row%3);
-        unordered_map<char,int> mp;
-        for(int i=row;i<row+3;i++){
-            for(int j=col;j<col+3;j++){
-                if(board[i][j] != '.'){
-                    mp[board[i][j]] = 1;
+        
+        for(int index = 0 ; index < 9; index++){
+            if(board[index][j] == ch){
+                return false;
+            }
+        }
+        int row = (i)/3;
+        int col = (j)/3;
+        for(int x = 3*row; x<3*(row+1); x++){
+            for(int y = 3*col ; y < 3*(col+1) ; y++){
+                if(board[x][y] == ch){
+                    return false;
                 }
             }
         }
-        if(mp.find(c) != mp.end()){
-            return false;
-        }
         return true;
     }
-    bool solve(vector<vector<char>>& board,int row){
-        for(int i=row;i<9;i++){
+    bool solve(vector<vector<char>> &board){
+        for(int i=0;i<9;i++){
             for(int j=0;j<9;j++){
                 if(board[i][j] == '.'){
-                    for(int k=1;k<=9;k++){
-                        string c = to_string(k);
-                        if(check(board,i,j,c[0])){
-                            board[i][j] = c[0];
-                            if(!solve(board,i)){
-                                board[i][j]='.';
-                            }else{
+                    for(char ch = '1' ; ch <= '9' ; ch++){
+                        if(isValid(ch , i , j , board)){
+                            board[i][j] = ch;
+                            if(solve(board)){
                                 return true;
+                            }else{
+                                board[i][j] = '.';
                             }
                         }
                     }
                     return false;
-                    
-                }
-                else if(i==8 && j==8){
-                    return true;
                 }
             }
         }
-        return false;
+        return true;
     }
     void solveSudoku(vector<vector<char>>& board) {
-        bool t = solve(board,0);
+        solve(board);
         return;
     }
 };
