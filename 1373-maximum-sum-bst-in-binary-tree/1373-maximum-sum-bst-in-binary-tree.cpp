@@ -11,7 +11,6 @@
  */
 class Solution {
 public:
-    int ans = 0;
     vector<int> solve(TreeNode* root , int &ans){
         if(!root){
             return {0 , INT_MIN , INT_MAX};
