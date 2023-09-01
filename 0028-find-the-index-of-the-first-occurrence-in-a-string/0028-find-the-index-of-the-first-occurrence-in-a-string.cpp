@@ -1,56 +1,25 @@
 class Solution {
 public:
-    // using stl
-    // int strStr(string h, string needle) {
-    //     return h.find(needle);
-    // }
-    
-    // using rolling hash
-    // bool check(string needle , string h , int j){
-    //     // cout<<j<<endl;
-    //     for(int x=0;x<needle.length();x++){
-    //         if(needle[x]!=h[x+j]){
-    //             return false;
+    // vector<int> kmpProcess(string s){
+    //     int n = s.size();
+    //     vector<int> ans(n , 0);
+    //     int i=1 , len = 0;
+    //     while(i<n){
+    //         if(s[i] == s[len]){
+    //             len++;
+    //             ans[i] = len;
+    //             i++;
+    //         }else{
+    //             if(len > 0){
+    //                 len--;
+    //             }else{
+    //                 ans[i] = len;
+    //                 i++;
+    //             }
     //         }
     //     }
-    //     return true;
+    //     return ans;
     // }
-    // int strStr(string h, string needle) {
-    //     if(h.length() < needle.length()){
-    //         return -1;
-    //     }
-    //     int total = 0;
-    //     for(auto it: needle){
-    //         total+=(it-'a');
-    //     }
-    //     // cout<<total<<"first"<<endl;
-    //     int i=0,j=0;
-    //     for(i=0;i<needle.length();i++){
-    //         total-=(h[i]-'a');
-    //     }
-    //     // cout<<total<<"first loop"<<endl;
-    //     if(total == 0){
-    //         if(check(needle , h ,j)){
-    //             return j;
-    //         }
-    //     }
-    //     while(i<h.length()){
-    //         total-=(h[i]-'a');
-    //         total+=(h[j]-'a');
-    //         j++;
-    //         i++;
-    //         // cout<<total<<"total"<<endl;
-    //         if(total == 0 && check(needle , h ,j)){
-    //             return j;
-    //         }
-    //     }
-    //     return -1;
-    // }
-    
-    
-    // Using KMP and PI array
-    
-    
     // pi table or LPS i.e longest prefix same as suffix 
     vector<int> kmpProcess(string needle) {
         int n = needle.size();
@@ -88,7 +57,11 @@ public:
                 return i - j;
             }
             if (i < m && h[i] != needle[j]) {
-                j ? j = pos[j - 1] : i++;
+                if(j == 0){
+                    i++;
+                }else{
+                    j = pos[j-1];
+                }
             }
         }
         return -1;
