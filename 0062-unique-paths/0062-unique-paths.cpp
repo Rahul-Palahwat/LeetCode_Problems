@@ -28,9 +28,8 @@ public:
     
     
     
-    // Now tabulation
+    // Now tabulation with more optimization
     int uniquePaths(int m, int n) {
-        // vector<vector<int>> dp(n, vector<int>(m, 1));
         vector<int> dp(m,1);
         for(int i=1;i<n;i++){
             vector<int> temp(m , 1);
