@@ -24,35 +24,25 @@ public:
     
     
     
-    // Morris Traversal
+    // Iterative approach
     vector<int> inorderTraversal(TreeNode* root) {
-        vector<int> inorder;
-        TreeNode* cur = root;
-        while(cur){
-            // when there is no one in left 
-            if(cur->left == NULL){
-                inorder.push_back(cur->val);
-                cur = cur->right;
-            }
-            // when there are nodes in left so we will move to left and then bottom of right to connect to cur node by threading 
-            else{
-                TreeNode* prev = cur->left;
-                while(prev->right && prev->right != cur){
-                    prev = prev->right;
+        vector<int> ans;
+        stack<TreeNode*> st;
+        TreeNode *node = root;
+        while(true){
+            if(node){
+                st.push(node);
+                node = node->left;
+            }else{
+                if(st.empty()){
+                    break;
                 }
-                // if no thread is present then we will add thread
-                if(prev->right == NULL){
-                    prev->right = cur;
-                    cur = cur->left;
-                }
-                // thread already present so we have to break that thread 
-                else{
-                    inorder.push_back(cur->val);
-                    prev->right = NULL;
-                    cur = cur->right;
-                }
+                node = st.top();
+                st.pop();
+                ans.push_back(node->val);
+                node = node->right;
             }
         }
-        return inorder;
+        return ans;
     }
 };
