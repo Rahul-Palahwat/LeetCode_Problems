@@ -9,33 +9,32 @@
  */
 class Solution {
 public:
-    bool solve(TreeNode* root , TreeNode* f , vector<TreeNode*>& path){
+    bool findPath(TreeNode *root , TreeNode *node , vector<TreeNode*> &ans){
         if(!root){
             return false;
         }
-        path.push_back(root);
-        if(root == f){
+        ans.push_back(root);
+        if(root == node){
             return true;
         }
-        if(solve(root->left , f , path) || solve(root->right , f , path)){
+        if(findPath(root->left , node , ans) || findPath(root->right , node , ans)){
             return true;
         }
-        path.pop_back();
+        ans.pop_back();
         return false;
     }
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        vector<TreeNode*> path1,path2;
-        solve(root , p , path1);
-        solve(root , q , path2);
-        TreeNode* ans;
-        int i=0,j=0;
-        while(i<path1.size() && j<path2.size()){
-            if(path1[i] != path2[j]){
-                break;
+        vector<TreeNode*> first , second;
+        findPath(root , p , first);
+        findPath(root , q , second);
+        int n = first.size(), m = second.size();
+        int mini = min(n , m);
+        TreeNode *ans = NULL;
+        // cout<<n<<" "<<m<<endl;
+        for(int i=0;i<mini;i++){
+            if(first[i] == second[i]){
+                ans = first[i];
             }
-            ans = path1[i];
-            i++;
-            j++;
         }
         return ans;
     }
