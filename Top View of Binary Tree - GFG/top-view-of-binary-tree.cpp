@@ -106,24 +106,22 @@ class Solution
     {
         //Your code here
         map<int,int> mp;
-        vector<int> ans;
-        if(!root){
-            return ans;
-        }
         queue<pair<Node* , int>> q;
+        vector<int> ans;
         q.push({root , 0});
         while(!q.empty()){
-            Node* node = q.front().first;
-            int pos = q.front().second;
+            auto top = q.front();
             q.pop();
+            Node *temp = top.first;
+            int pos = top.second;
             if(mp.find(pos) == mp.end()){
-                mp[pos] = node->data;
+                mp[pos] = temp->data;
             }
-            if(node->left){
-                q.push({node->left , pos-1});
+            if(temp->left){
+                q.push({temp->left , pos-1});
             }
-            if(node->right){
-                q.push({node->right , pos+1});
+            if(temp->right){
+                q.push({temp->right , pos+1});
             }
         }
         for(auto it: mp){
