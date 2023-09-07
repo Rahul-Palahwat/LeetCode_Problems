@@ -8,56 +8,63 @@
  * };
  */
 class Solution {
-void markParents(TreeNode* root, unordered_map<TreeNode*, TreeNode*> &parent_track, TreeNode* target) {
-        queue<TreeNode*> queue;
-        queue.push(root);
-        while(!queue.empty()) { 
-            TreeNode* current = queue.front(); 
-            queue.pop();
-            if(current->left) {
-                parent_track[current->left] = current;
-                queue.push(current->left);
-            }
-            if(current->right) {
-                parent_track[current->right] = current;
-                queue.push(current->right);
-            }
-        }
-    }
 public:
-    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
-        unordered_map<TreeNode*, TreeNode*> parent_track; // node -> parent
-        markParents(root, parent_track, target); 
-        
-        unordered_map<TreeNode*, bool> visited; 
-        queue<TreeNode*> queue;
-        queue.push(target);
-        visited[target] = true;
-        int curr_level = 0;
-        while(!queue.empty()) { /*Second BFS to go upto K level from target node and using our hashtable info*/
-            int size = queue.size();
-            if(curr_level++ == k) break;
-            for(int i=0; i<size; i++) {
-                TreeNode* current = queue.front(); queue.pop();
-                if(current->left && !visited[current->left]) {
-                    queue.push(current->left);
-                    visited[current->left] = true;
-                }
-                if(current->right && !visited[current->right]) {
-                    queue.push(current->right);
-                    visited[current->right] = true;
-                }
-                if(parent_track[current] && !visited[parent_track[current]]) {
-                    queue.push(parent_track[current]);
-                    visited[parent_track[current]] = true;
-                }
+    void solve(TreeNode* root, map<TreeNode* , TreeNode*> &mp){
+        if(!root){
+            return;
+        }
+        if(root->left){
+            mp[root->left] = root;
+        }
+        if(root->right){
+            mp[root->right] = root;
+        }
+        solve(root->left , mp);
+        solve(root->right , mp);
+        return;
+    }
+    void addNodes(TreeNode* root , int dis, vector<int> &ans){
+        if(!root){
+            return;
+        }
+        if(dis == 0){
+            ans.push_back(root->val);
+        }
+        addNodes(root->left , dis-1 , ans);
+        addNodes(root->right , dis-1 , ans);
+        return;
+    }
+    void addPrevNodes(TreeNode* root, int dis , map<TreeNode* , TreeNode*> &mp, vector<int> &ans){
+        if(!root){
+            return;
+        }
+        if(dis == 0){
+            ans.push_back(root->val);
+        }
+        if(mp.find(root) != mp.end()){
+            if(mp[root]->left == root){
+                addPrevNodes(mp[root] , dis-1 , mp , ans);
+                addNodes(mp[root]->right , dis-2 , ans);
+            }
+            else{
+                addPrevNodes(mp[root] , dis-1 , mp , ans);
+                addNodes(mp[root]->left , dis-2 , ans);
             }
         }
-        vector<int> result;
-        while(!queue.empty()) {
-            TreeNode* current = queue.front(); queue.pop();
-            result.push_back(current->val);
+        return;
+    }
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        vector<int> ans;
+        if(!root){
+            return ans;
         }
-        return result;
+        map<TreeNode*, TreeNode*> mp;
+        solve(root , mp);
+        addNodes(target , k, ans);
+        if(k == 0){
+            return ans;
+        }
+        addPrevNodes(target , k , mp , ans);
+        return ans;
     }
 };
