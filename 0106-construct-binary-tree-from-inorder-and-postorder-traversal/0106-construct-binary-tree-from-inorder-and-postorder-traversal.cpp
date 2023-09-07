@@ -11,88 +11,23 @@
  */
 class Solution {
 public:
-    
-    // Brute force , Create all Inorder and PostOrder arrays
-    // TreeNode* solve(vector<int> in, vector<int> p){
-    //     if(in.size() == 0 || p.size() == 0){
-    //         return NULL;
-    //     }
-    //     unordered_map<int,int> mp;
-    //     for(int i=0;i<in.size();i++){
-    //         mp[in[i]] = i;
-    //     }
-    //     TreeNode* node = new TreeNode(p[p.size()-1]);
-    //     int index = mp[p[p.size()-1]];
-    //     vector<int> leftIn , rightIn , leftP , rightP;
-    //     for(int i=0;i<index;i++){
-    //         leftIn.push_back(in[i]);
-    //     }
-    //     for(int i=index+1;i<in.size();i++){
-    //         rightIn.push_back(in[i]);
-    //     }
-    //     for(int i=0;i<index;i++){
-    //         leftP.push_back(p[i]);
-    //     }
-    //     for(int i=index;i<in.size()-1;i++){
-    //         rightP.push_back(p[i]);
-    //     }
-    //     node->left = solve(leftIn , leftP);
-    //     node->right = solve(rightIn , rightP);
-    //     return node;
-    // }
-    // TreeNode* buildTree(vector<int>& inorder, vector<int>& post) {
-    //     return solve(inorder ,post);
-    // }
-    
-    
-    // Optimized using same array
-    // unordered_map<int,int> mp;
-    // TreeNode* solve(vector<int>& in,int inStart ,int inEnd, vector<int>& p ,int pStart ,int pEnd){
-    //     if(inStart > inEnd){
-    //         return NULL;
-    //     }
-    //     if(pStart > pEnd){
-    //         return NULL;
-    //     }
-    //     TreeNode* node = new TreeNode(p[pEnd]);
-    //     int index = mp[p[pEnd]];
-    //     node->left = solve(in , inStart , index-1,p , pStart , pStart+index-inStart-1);
-    //     node->right = solve(in , index+1 , inEnd , p , pStart+index-inStart,pEnd-1);
-    //     return node;
-    // }
-    // TreeNode* buildTree(vector<int>& inorder, vector<int>& post) {
-    //     int n = inorder.size();
-    //     for(int i=0;i<n;i++){
-    //         mp[inorder[i]] = i;
-    //     }
-    //     return solve(inorder , 0 , n-1 ,post , 0 , n-1);
-    // }
-    
     unordered_map<int,int> mp;
-    TreeNode* solve(int starti , int endi , int startp , int endp , vector<int>&inorder , vector<int>& post){
-        if(starti > endi){
+    TreeNode* solve(vector<int>& in, int sIn, int eIn, vector<int>& post, int sPo, int ePo){
+        if(sIn > eIn || sPo > ePo){
             return NULL;
         }
-        if(startp > endp){
-            return NULL;
-        }
-        TreeNode* ans = new TreeNode(post[endp]);
-        int pos = mp[post[endp]];
-        ans->left = solve(starti , pos-1, startp, startp+pos-starti-1, inorder , post);
-        ans->right = solve(pos+1 , endi , startp+pos-starti , endp-1, inorder , post);
-        return ans;
+        TreeNode *root = new TreeNode(post[ePo]);
+        int pos = mp[post[ePo]];
+        int size = pos - sIn;
+        root->left = solve(in , sIn , sIn+size , post , sPo , sPo+size-1);
+        root->right = solve(in , sIn+size+1, eIn , post , sPo+size , ePo-1);
+        return root;
     }
-    TreeNode* buildTree(vector<int>& inorder, vector<int>& post) {
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
         int n = inorder.size();
         for(int i=0;i<n;i++){
             mp[inorder[i]] = i;
         }
-        return solve(0 , n-1 , 0 , n-1 , inorder , post);
+        return solve(inorder , 0 , n-1 , postorder , 0 , n-1);
     }
-    
-    
-    
-    
-    
-    
 };
