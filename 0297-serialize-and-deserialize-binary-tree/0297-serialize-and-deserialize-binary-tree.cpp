@@ -12,25 +12,20 @@ public:
 
     // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
-        if(!root){
-            return "";
-        }
         string ans = "";
         queue<TreeNode*> q;
         q.push(root);
         while(!q.empty()){
-            int t = q.size();
-            while(t--){
-                auto top = q.front();
-                q.pop();
-                if(top == NULL){
-                    ans+="#,";
-                }else{
-                    ans+=to_string(top->val);
-                    ans+=",";
-                    q.push(top->left);
-                    q.push(top->right);
-                }
+            auto top = q.front();
+            q.pop();
+            if(top != NULL)
+                ans+=to_string(top->val);
+            else
+                ans+="NULL";
+            ans+="#";
+            if(top){
+                q.push(top->left);
+                q.push(top->right);
             }
         }
         cout<<ans<<endl;
@@ -39,49 +34,53 @@ public:
 
     // Decodes your encoded data to tree.
     TreeNode* deserialize(string data) {
-        if(data.length() == 0){
-            return NULL;
-        }
-        int n = data.length();
-        string temp= "";
-        queue<TreeNode*> q;
+        int n = data.size();
+        string temp = "";
         int i = 0;
-        while(data[i] != ','){
+        while(data[i] != '#'){
             temp+=data[i];
             i++;
         }
-        TreeNode* node = new TreeNode(stoi(temp));
-        TreeNode* ans = node;
-        temp = "";
         i++;
-        q.push(node);
-        int j=0;
-        TreeNode* top;
-        for(;i<n;i++){
-            if(data[i] == ','){
-                if(j%2 ==0){
-                    top = q.front();
-                    q.pop();
-                }
-                if(temp == "#"){
-                    j++;
-                }else{
-                    int val = stoi(temp);
-                    if(j%2 == 0){
-                        top->left = new TreeNode(val);
-                        q.push(top->left);
-                    }else{
-                        top->right = new TreeNode(val);
-                        q.push(top->right);
-                    }
-                    j++;
-                }
-                temp = "";
-            }else{
-                temp+=data[i];
-            }
+        // cout<<temp<<"temp"<<endl;
+        if(temp[0] == 'N'){
+            return NULL;
         }
-        return ans;
+        int val = stoi(temp);
+        TreeNode *root = new TreeNode(val);
+        queue<TreeNode*> q;
+        q.push(root);
+        temp = "";
+        // cout<<n<<" "<<i<<endl;
+        while(!q.empty() && i<n){
+            auto top = q.front();
+            q.pop();
+            while(i<n && data[i] != '#'){
+                temp+=data[i];
+                i++;
+            }
+            i++;
+            if(temp != "NULL"){
+                val = stoi(temp);
+                top->left = new TreeNode(val);
+                q.push(top->left);
+            }
+            temp = "";
+            while(i<n && data[i] != '#'){
+                temp+=data[i];
+                i++;
+            }
+            i++;
+            if(temp != "NULL"){
+                val = stoi(temp);
+                top->right = new TreeNode(val);
+                q.push(top->right);
+            }
+            // i++;
+            temp = "";
+            
+        }
+        return root;
     }
 };
 
