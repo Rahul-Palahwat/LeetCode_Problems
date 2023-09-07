@@ -9,6 +9,8 @@
  */
 class Solution {
 public:
+    
+    // Function for storing parent nodes
     void solve(TreeNode* root, map<TreeNode* , TreeNode*> &mp){
         if(!root){
             return;
@@ -23,48 +25,40 @@ public:
         solve(root->right , mp);
         return;
     }
-    void addNodes(TreeNode* root , int dis, vector<int> &ans){
-        if(!root){
-            return;
-        }
-        if(dis == 0){
-            ans.push_back(root->val);
-        }
-        addNodes(root->left , dis-1 , ans);
-        addNodes(root->right , dis-1 , ans);
-        return;
-    }
-    void addPrevNodes(TreeNode* root, int dis , map<TreeNode* , TreeNode*> &mp, vector<int> &ans){
-        if(!root){
-            return;
-        }
-        if(dis == 0){
-            ans.push_back(root->val);
-        }
-        if(mp.find(root) != mp.end()){
-            if(mp[root]->left == root){
-                addPrevNodes(mp[root] , dis-1 , mp , ans);
-                addNodes(mp[root]->right , dis-2 , ans);
-            }
-            else{
-                addPrevNodes(mp[root] , dis-1 , mp , ans);
-                addNodes(mp[root]->left , dis-2 , ans);
-            }
-        }
-        return;
-    }
+    
     vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
         vector<int> ans;
         if(!root){
             return ans;
         }
         map<TreeNode*, TreeNode*> mp;
+        // Function for storing parent Nodes
         solve(root , mp);
-        addNodes(target , k, ans);
-        if(k == 0){
-            return ans;
+        map<TreeNode* , int> vis;
+        queue<TreeNode*> q;
+        q.push(target);
+        int dis = 0;
+        while(!q.empty()){
+            int sz = q.size();
+            while(sz--){
+                auto top = q.front();
+                q.pop();
+                vis[top]=1;
+                if(dis == k){
+                    ans.push_back(top->val);
+                }
+                if(top->left && vis.find(top->left) == vis.end()){
+                    q.push(top->left);
+                }
+                if(top->right && vis.find(top->right) == vis.end()){
+                    q.push(top->right);
+                }
+                if(mp.find(top) != mp.end() && vis.find(mp[top]) == vis.end()){
+                    q.push(mp[top]);
+                }
+            }
+            dis++;
         }
-        addPrevNodes(target , k , mp , ans);
         return ans;
     }
 };
