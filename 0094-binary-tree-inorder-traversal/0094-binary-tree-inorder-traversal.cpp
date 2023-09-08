@@ -25,24 +25,54 @@ public:
     
     
     // Iterative approach
+    // vector<int> inorderTraversal(TreeNode* root) {
+    //     vector<int> ans;
+    //     stack<TreeNode*> st;
+    //     TreeNode *node = root;
+    //     while(true){
+    //         if(node){
+    //             st.push(node);
+    //             node = node->left;
+    //         }else{
+    //             if(st.empty()){
+    //                 break;
+    //             }
+    //             node = st.top();
+    //             st.pop();
+    //             ans.push_back(node->val);
+    //             node = node->right;
+    //         }
+    //     }
+    //     return ans;
+    // }
+    
+    
+    
+    
+    
+    // Morris Traversal
     vector<int> inorderTraversal(TreeNode* root) {
-        vector<int> ans;
-        stack<TreeNode*> st;
-        TreeNode *node = root;
-        while(true){
-            if(node){
-                st.push(node);
-                node = node->left;
+        vector<int> inorder;
+        TreeNode *curr = root;
+        while(curr){
+            if(curr->left == NULL){
+                inorder.push_back(curr->val);
+                curr = curr->right;
             }else{
-                if(st.empty()){
-                    break;
+                TreeNode *temp = curr->left;
+                while(temp->right && temp->right != curr){
+                    temp = temp->right;
                 }
-                node = st.top();
-                st.pop();
-                ans.push_back(node->val);
-                node = node->right;
+                if(temp->right == NULL){
+                    temp->right = curr;
+                    curr = curr->left;
+                }else{
+                    temp->right = NULL;
+                    inorder.push_back(curr->val);
+                    curr = curr->right;
+                }
             }
         }
-        return ans;
+        return inorder;
     }
 };
