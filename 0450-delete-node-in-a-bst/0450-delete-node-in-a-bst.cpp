@@ -11,7 +11,7 @@
  */
 class Solution {
 public:
-    int findLeftMini(TreeNode* root){
+    int findLeftMini(TreeNode *root){
         while(root->left){
             root = root->left;
         }
@@ -32,9 +32,10 @@ public:
             if(root->left == NULL){
                 return root->right;
             }
-            int val = findLeftMini(root->right);
-            root->val = val;
-            root->right = deleteNode(root->right , val);
+            // find minimun on right side
+            int node = findLeftMini(root->right);
+            root->val = node;
+            root->right = deleteNode(root->right , node);
         }
         return root;
     }
