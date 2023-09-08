@@ -11,24 +11,20 @@
  */
 class Solution {
 public:
-    TreeNode* bstFromPreorder(vector<int>& pre) {
-        int n = pre.size();
-        if(n == 0)
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        int n = preorder.size();
+        if(n == 0){
             return NULL;
-        
-        TreeNode* node = new TreeNode(pre[0]);
-        if(n==1)
-            return node;
-        
+        }
+        TreeNode *root = new TreeNode(preorder[0]);
         int i=1;
-        while(i<n && (pre[i]< pre[0]))
+        while(i<n && preorder[i] < preorder[0]){
             i++;
-        
-        vector<int> left(pre.begin()+1 , pre.begin()+i);
-        node->left = bstFromPreorder(left);
-        vector<int> right(pre.begin()+i , pre.begin()+n);
-        node->right = bstFromPreorder(right);
-        return node;
-        
+        }
+        vector<int> left(preorder.begin()+1 , preorder.begin()+i);
+        root->left = bstFromPreorder(left);
+        vector<int> right(preorder.begin()+i , preorder.begin()+n);
+        root->right = bstFromPreorder(right);
+        return root;
     }
 };
