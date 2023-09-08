@@ -12,21 +12,35 @@
 class Solution {
 public:
     
+    // My Recursive approach
+    // void flatten(TreeNode* root) {
+    //     if(!root){
+    //         return;
+    //     }
+    //     flatten(root->left);
+    //     flatten(root->right);
+    //     TreeNode *temp = root;
+    //     TreeNode *left = root->left, *right = root->right;
+    //     temp->left = NULL;
+    //     temp->right = left;
+    //     while(temp->right){
+    //         temp = temp->right;
+    //     }
+    //     temp->right = right;
+    //     return;
+    // }
+    
+    // Striver Recursive
+    TreeNode *prev = NULL;
     void flatten(TreeNode* root) {
         if(!root){
             return;
         }
-        flatten(root->left);
         flatten(root->right);
-        TreeNode *temp = root;
-        TreeNode *left = root->left, *right = root->right;
-        temp->left = NULL;
-        temp->right = left;
-        while(temp->right){
-            temp = temp->right;
-        }
-        temp->right = right;
-        
+        flatten(root->left);
+        root->right = prev;
+        root->left = NULL;
+        prev = root;
         return;
     }
     
