@@ -42,20 +42,20 @@ public:
     
     
     // Moore's Voting Algorithm 
-    vector<int> majorityElement(vector<int>& nums) {
+    vector<int> majorityElement(vector<int>& arr) {
         vector<int> ans;
-        int cnt1 = 0 , cnt2 = 0, ele1 = INT_MAX , ele2 = INT_MAX;
-        int n = nums.size();
+        int cnt1=0,cnt2=0,ele1=INT_MAX,ele2=INT_MAX;
+        int n = arr.size();
         for(int i=0;i<n;i++){
-            if(cnt1 == 0 && ele2 != nums[i]){
-                ele1 = nums[i];
+            if(cnt1 == 0 && ele2 != arr[i]){
                 cnt1++;
-            }else if(cnt2 == 0 && ele1 != nums[i]){
-                ele2 = nums[i];
+                ele1 = arr[i];
+            }else if(cnt2 == 0 && ele1 != arr[i]){
                 cnt2++;
-            }else if(ele1 == nums[i]){
+                ele2 = arr[i];
+            }else if(ele1 == arr[i]){
                 cnt1++;
-            }else if(ele2 == nums[i]){
+            }else if(ele2 == arr[i]){
                 cnt2++;
             }else{
                 cnt1--;
@@ -63,7 +63,7 @@ public:
             }
         }
         cnt1 =0 , cnt2 = 0;
-        for(auto it: nums){
+        for(auto it: arr){
             if(it == ele1){
                 cnt1++;
             }
