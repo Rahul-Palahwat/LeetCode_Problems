@@ -73,46 +73,52 @@ void insert()
    };
 
 */
-#include<bits/stdc++.h>
+
 class Solution
 {
     public:
+    Node *reverse(Node *temp){
+        Node *prev = NULL, *curr = temp;
+        while(temp){
+            curr = temp->next;
+            temp->next = prev;
+            prev = temp;
+            temp = curr;
+        }
+        return prev;
+    }
     void rearrange(struct Node *odd)
     {
         //add code here
-        vector<int> s , f;
         if(!odd || !odd->next || !odd->next->next){
             return;
         }
-        Node *slow = odd->next , *fast = slow->next;
+        Node *slow = odd->next , *fast = odd;
+        Node *temp = slow;
         while(fast){
-            f.push_back(fast->data);
-            if(fast->next)
-                fast = fast->next->next;
-            else
+            if(fast->next){
+                fast->next = fast->next->next;
+                fast = fast->next;
+                if(fast){
+                    slow->next = fast->next;
+                    slow = slow->next;
+                }
+               
+            }else{
                 break;
-        }
-        int i = 0;
-        while(slow){
-            if(i%2 == 0){
-                s.push_back(slow->data);
             }
-            i++;
+        }
+        slow = temp;
+        // while(slow){
+        //     cout<<slow->data<<" ";
+        //     slow = slow->next;
+        // }
+        temp = reverse(temp);
+        slow = odd;
+        while(slow->next){
             slow = slow->next;
         }
-        i=0;
-        slow = odd->next;
-        while(slow && i<f.size()){
-            slow->data = f[i];
-            i++;
-            slow= slow->next;
-        }
-        i = s.size()-1;
-        while(slow){
-            slow->data = s[i];
-            i--;
-            slow= slow->next;
-        }
+        slow->next = temp;
         return;
     }
 };
