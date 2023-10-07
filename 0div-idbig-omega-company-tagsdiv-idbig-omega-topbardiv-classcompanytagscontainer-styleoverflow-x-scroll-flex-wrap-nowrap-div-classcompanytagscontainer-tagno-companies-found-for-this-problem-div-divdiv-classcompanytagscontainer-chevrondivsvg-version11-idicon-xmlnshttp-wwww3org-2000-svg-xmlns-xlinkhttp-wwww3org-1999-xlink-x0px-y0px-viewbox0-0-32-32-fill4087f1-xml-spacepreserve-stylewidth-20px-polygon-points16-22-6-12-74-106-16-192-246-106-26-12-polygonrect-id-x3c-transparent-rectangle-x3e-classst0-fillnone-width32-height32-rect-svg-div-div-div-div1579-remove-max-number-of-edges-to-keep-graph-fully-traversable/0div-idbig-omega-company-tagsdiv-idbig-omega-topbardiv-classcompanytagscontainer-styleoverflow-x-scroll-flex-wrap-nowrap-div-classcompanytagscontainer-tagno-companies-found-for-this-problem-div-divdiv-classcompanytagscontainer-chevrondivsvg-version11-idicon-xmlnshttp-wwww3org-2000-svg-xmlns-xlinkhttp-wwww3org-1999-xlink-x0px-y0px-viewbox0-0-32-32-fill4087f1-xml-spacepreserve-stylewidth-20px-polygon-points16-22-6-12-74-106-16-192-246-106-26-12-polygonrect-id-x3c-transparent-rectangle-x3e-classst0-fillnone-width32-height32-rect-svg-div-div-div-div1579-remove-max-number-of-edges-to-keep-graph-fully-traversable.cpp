@@ -37,18 +37,6 @@ class DisjointSet{
 };
 class Solution {
 public:
-    void dfs(int node, vector<pair<int,int>> g[], vector<bool> &vis, int color){
-        if(vis[node]){
-            return;
-        }
-        vis[node] = true;
-        for(auto it: g[node]){
-            if(it.second == 3 || it.second == color){
-                dfs(it.first , g , vis , color);
-            }
-        }
-        return;
-    }
     int maxNumEdgesToRemove(int n, vector<vector<int>>& edges) {
         sort(edges.begin(), edges.end());
         int sz = edges.size();
@@ -76,7 +64,7 @@ public:
         int sizeAlice = dsuAlice.findSize(parAlice);
         int parBob = dsuBob.findParent(1);
         int sizeBob = dsuBob.findSize(parBob);
-        cout<<sizeAlice<<" "<<sizeBob<<endl;
+        // cout<<sizeAlice<<" "<<sizeBob<<endl;
         if(sizeAlice == n && sizeBob == n){
             return ans;
         }
