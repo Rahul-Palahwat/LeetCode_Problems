@@ -11,11 +11,13 @@ public:
         string temp="";
         for(int i=index;i<n;i++){
             temp+=s[i];
-            mp[temp]++;
-            solve(i+1 , s , mp);
-            mp[temp]--;
-            if(mp[temp] == 0){
-                mp.erase(temp);
+            if(mp.find(temp) == mp.end()){
+                mp[temp]++;
+                solve(i+1 , s , mp);
+                // mp[temp]--;
+                // if(mp[temp] == 0){
+                    mp.erase(temp);
+                // }
             }
             // temp.pop_back();
         }
