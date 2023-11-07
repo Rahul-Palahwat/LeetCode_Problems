@@ -6,59 +6,26 @@ using namespace std;
 class Solution
 {
 public:
-    // vector<vector<int>> ans;
-    // void solve(vector<int> arr , int index,vector<int>& temp){
-    //     if(index == arr.size()){
-    //         ans.push_back(temp);
-    //         return;
-    //     }
-    //     vector<int> t = temp;
-    //     t.push_back(arr[index]);
-    //     solve(arr,index+1,t);
-    //     solve(arr,index+1,temp);
-    //     return;
-        
-    // }
-    // vector<int> subsetSums(vector<int> arr, int N)
-    // {
-    //     vector<int> temp,final;
-    //     solve(arr,0,temp);
-    //     // cout<<ans.size();
-    //     for(auto it: ans){
-    //         int sum=0;
-    //         for(auto iti:it){
-    //             sum+=iti;
-    //         }
-    //         final.push_back(sum);
-    //     }
-    //     return final;
-    //     // Write Your Code here
-    // }
-    vector<vector<int>> all;
-    void solve(vector<int> arr, int index , vector<int> temp){
+    vector<int> ans;
+    void solve(int index, vector<int> &arr, int sum, bool taken){
         if(index >= arr.size()){
-            all.push_back(temp);
+            if(sum != 0){
+                ans.push_back(sum);
+            }else if(taken){
+                ans.push_back(sum);
+            }
             return;
         }
-        vector<int> t1=temp;
-        temp.push_back(arr[index]);
-        solve(arr,index+1,t1);
-        solve(arr,index+1,temp);
+        solve(index+1 , arr , sum, taken);
+        solve(index+1 , arr , sum+arr[index], true);
         return;
     }
     vector<int> subsetSums(vector<int> arr, int N)
     {
-        vector<int> ans,final;
-        solve(arr,0,ans);
-        for(auto it: all){
-            int sum = 0;
-            for(auto i : it){
-                sum+=i;
-            }
-            final.push_back(sum);
-        }
-        return final;
-        
+        // Write Your Code here
+        ans.push_back(0);
+        solve(0 , arr, 0, false);
+        return ans;
     }
 };
 
