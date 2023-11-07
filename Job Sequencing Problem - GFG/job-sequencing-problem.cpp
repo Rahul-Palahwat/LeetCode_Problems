@@ -27,26 +27,28 @@ class Solution
 {
     public:
     //Function to find the maximum profit and the number of jobs done.
-    static bool cmp(Job a , Job b){
-        return a.profit > b.profit;
+    
+    static bool cmp(Job one, Job two){
+        return one.profit > two.profit;
     }
+    // Thought process maximum profit ko pehle krna h
     vector<int> JobScheduling(Job arr[], int n) 
     { 
         // your code here
-        sort(arr , arr+n , cmp);
-        int maxiDeadline = 0;
-        for(int i=0;i<n;i++){
-            maxiDeadline = max(maxiDeadline , arr[i].dead);
-        }
+        sort(arr, arr+n , cmp);
         vector<int> ans;
-        vector<int> dp(maxiDeadline+1 , -1);
+        int maxiDeadLine = 0;
+        for(int i=0;i<n;i++){
+            maxiDeadLine = max(maxiDeadLine , arr[i].dead);
+        }
+        vector<int> dp(maxiDeadLine+1 , -1);
         int cnt = 0 , sum = 0;
         for(int i=0;i<n;i++){
-            for(int j=arr[i].dead; j>0 ;j--){
+            for(int j = arr[i].dead;j>0;j--){
                 if(dp[j] == -1){
-                    cnt++;
                     sum+=arr[i].profit;
-                    dp[j] = arr[i].id;
+                    cnt++;
+                    dp[j] = arr[i].profit;
                     break;
                 }
             }
